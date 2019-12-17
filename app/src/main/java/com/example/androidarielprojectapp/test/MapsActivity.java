@@ -1,10 +1,13 @@
 package com.example.androidarielprojectapp.test;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -38,6 +41,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     GoogleApiClient mGoogleApiClient;
     LocationRequest mLocationRequest;
     private GoogleMap mMap;
+    Button newRentalActivityButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +51,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        newRentalActivityButton = (Button)findViewById(R.id.new_rent_activity_button);
 
 
     }
@@ -94,6 +100,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 mMap.addMarker(markerOptions);
             }
         });
+
+
+        // start a new rental
+        newRentalActivityButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                Intent i = new Intent(getApplicationContext(), NewRentalActivity.class);
+                i.putExtra("RENTAL_LOCATION", mCurrLocationMarker.getPosition());
+                startActivity(i);
+
+            }
+        });
+
 
     }
     protected synchronized void buildGoogleApiClient() {
