@@ -20,6 +20,7 @@
         <activity android:name=".test.SuperRentActivity" />
         <activity android:name=".test.UserRentActivity" />
         <activity android:name=".test.MapsActivity" />
+        <activity android:name=".test.NewRentalActivity" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -32,5 +33,6 @@
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /> <!--  user permission to access gps. -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/> <!-- to read from image gallery -->
 
 </manifest>
