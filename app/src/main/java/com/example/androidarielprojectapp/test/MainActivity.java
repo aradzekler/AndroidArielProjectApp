@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                Intent i = new Intent(getApplicationContext(),SuperRentActivity.class);
+                Intent i = new Intent(getApplicationContext(),MapsActivity.class);
                 startActivity(i);
             }
         });
