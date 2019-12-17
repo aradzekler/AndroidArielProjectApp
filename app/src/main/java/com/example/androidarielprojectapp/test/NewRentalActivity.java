@@ -37,13 +37,14 @@ public class NewRentalActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    private int PICK_IMAGE_REQUEST = 1;
-    private int SCOOTER = 10;
-    private int BICYCLE = 20;
+    private final int PICK_IMAGE_REQUEST = 1;
+    private final int SCOOTER = 10;
+    private final int BICYCLE = 20;
+
     final File myDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/SmartPhoto");
     boolean success = false;
     int tool = 00; // storing vehicle id.
-    protected RegisterNewRentDataObject nrd = new RegisterNewRentDataObject();
+    protected RegisterNewRentDataObject nrd = new RegisterNewRentDataObject(); // building our data object
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +88,7 @@ public class NewRentalActivity extends AppCompatActivity {
         });
     }
 
-    // intent for choosing an image
+    // intent for choosing an image, launching onActivityResult.
     public void chooseImage() {
         Intent intent = new Intent();
         intent.setType("image/*");
@@ -110,13 +111,14 @@ public class NewRentalActivity extends AppCompatActivity {
 
                 ImageView imageView = findViewById(R.id.imgView);
                 imageView.setImageBitmap(bitmap);
+                saveImage(bitmap);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
 
-    // saving the image to data object.
+    // saving the image to data object used inside onActivityResult
     private void saveImage(Bitmap resource) {
 
         String savedImagePath = null;
