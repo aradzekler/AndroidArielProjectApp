@@ -54,7 +54,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         newRentalActivityButton = (Button)findViewById(R.id.new_rent_activity_button);
 
-
     }
 
     @Override
@@ -171,8 +170,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
 
     }
-
-
 
 
     @Override

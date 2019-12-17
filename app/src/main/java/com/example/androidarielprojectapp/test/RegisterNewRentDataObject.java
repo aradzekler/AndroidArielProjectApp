@@ -6,13 +6,14 @@ package com.example.androidarielprojectapp.test;
 public class RegisterNewRentDataObject {
 
     int tool;
+    int price;
+    int rentID;
     String notes;
-    String price;
     String imagePath;
 
     public RegisterNewRentDataObject() {
         imagePath = null;
-        price = null;
+        price = 00;
         notes = null;
         tool = 00;
     }
@@ -21,7 +22,7 @@ public class RegisterNewRentDataObject {
     public RegisterNewRentDataObject(int tool, String notes, String price) {
         this.tool = tool;
         this.notes = notes;
-        this.price = price;
+        this.price = Integer.parseInt(price);
     }
 
     public int getTool() {
@@ -40,7 +41,7 @@ public class RegisterNewRentDataObject {
         this.notes = notes;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(int price) {
         this.price = price;
     }
 

@@ -42,33 +42,36 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="20dp">
+
+
             <TextView
                 android:id="@+id/type_textview"
-                android:paddingRight="15dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Type:"
                 android:fontFeatureSettings="text"
+                android:paddingRight="15dp"
+                android:text="Type:"
                 android:textSize="20dp" />
+
             <RadioGroup
                 android:id="@+id/type_radio_group"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/type_textview"
                 android:orientation="horizontal">
+
                 <RadioButton
                     android:id="@+id/scooter_radio_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Scooter"
                     android:checked="true"
-                    />
+                    android:text="Scooter" />
+
                 <RadioButton
                     android:id="@+id/bicycle_radio_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text = "Bicycle"
-                    />
+                    android:text="Bicycle" />
 
             </RadioGroup>
         </RelativeLayout>
@@ -76,8 +79,31 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingTop="20dp"
-            android:paddingBottom="20dp">
+            android:paddingTop="20dp">
+
+            <TextView
+                android:id="@+id/price_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFeatureSettings="text"
+                android:paddingRight="15dp"
+                android:text="Price:"
+                android:textSize="20dp" />
+
+            <EditText
+                android:id="@+id/price_text_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/price_textview"
+                android:inputType="text" />
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="20dp">
 
 
             <TextView
@@ -98,27 +124,6 @@
 
         </RelativeLayout>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/price_textview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFeatureSettings="text"
-                android:paddingRight="15dp"
-                android:text="Price:"
-                android:textSize="20dp" />
-
-            <EditText
-                android:id="@+id/price_text_input"
-                android:layout_height="wrap_content"
-                android:layout_width="match_parent"
-                android:inputType="text"
-                android:layout_toRightOf="@+id/price_textview" />
-
-        </RelativeLayout>
 
         <Button android:id="@+id/reg_btn"
             android:layout_width="fill_parent"

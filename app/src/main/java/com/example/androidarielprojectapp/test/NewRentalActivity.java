@@ -4,11 +4,9 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,21 +15,21 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.androidarielprojectapp.R;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Random;
 
 /**
- * new rental activity
+ * activity for renting out and registering the rent.
  */
 public class NewRentalActivity extends AppCompatActivity {
 
@@ -40,9 +38,7 @@ public class NewRentalActivity extends AppCompatActivity {
     private final int PICK_IMAGE_REQUEST = 1;
     private final int SCOOTER = 10;
     private final int BICYCLE = 20;
-
-    final File myDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/SmartPhoto");
-    boolean success = false;
+    private String userId = "00000";
     int tool = 00; // storing vehicle id.
     protected RegisterNewRentDataObject nrd = new RegisterNewRentDataObject(); // building our data object
 
@@ -58,8 +54,14 @@ public class NewRentalActivity extends AppCompatActivity {
         final RadioGroup rg = findViewById(R.id.type_radio_group);
         final RadioButton scooterBtn = (RadioButton) findViewById(R.id.scooter_radio_btn);
         final RadioButton biBtn = (RadioButton) findViewById(R.id.bicycle_radio_btn);
+        final DatabaseReference mDatabase;
+        final DatabaseReference mDatabaseUsers;
 
+        mDatabase = FirebaseDatabase.getInstance().getReference(); // reference to database
 
+        mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Users").child(userId); // reference to users.
+
+        // when select image button is clicked.
         selectImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -71,9 +73,15 @@ public class NewRentalActivity extends AppCompatActivity {
         registerVe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: db link
                 String notes = notesText.getText().toString();
                 String price = priceText.getText().toString();
+
+                try {
+                    int finalPrice=Integer.parseInt(price);
+                    nrd.setPrice(finalPrice);
+                } catch(NumberFormatException ex) { // handle your exception
+                    //
+                }
 
                 if (rg.getCheckedRadioButtonId() == -1) {
                     // no radio buttons are checked
@@ -83,7 +91,10 @@ public class NewRentalActivity extends AppCompatActivity {
                     tool = BICYCLE;
                 }
                 nrd.setNotes(notes);
-                nrd.setPrice(price);
+                //TODO: handle data with firebase, make sure data is processed correcrly
+                mDatabaseUsers.child("tool").setValue(nrd.getTool());
+
+                Toast.makeText(getApplicationContext(), "Data Saved", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -107,8 +118,6 @@ public class NewRentalActivity extends AppCompatActivity {
 
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
-                // Log.d(TAG, String.valueOf(bitmap));
-
                 ImageView imageView = findViewById(R.id.imgView);
                 imageView.setImageBitmap(bitmap);
                 saveImage(bitmap);
@@ -123,17 +132,15 @@ public class NewRentalActivity extends AppCompatActivity {
 
         String savedImagePath = null;
         String imageFileName =  "image" + ".jpg";
-
-
         final File storageDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() +
                 "/Pics");
 
         boolean success = true;
-        if(!storageDir.exists()){
+        if (!storageDir.exists()) {
             success = storageDir.mkdirs();
         }
 
-        if(success){
+        if (success) {
             File imageFile = new File(storageDir, imageFileName);
             savedImagePath = imageFile.getAbsolutePath();
             try {
@@ -146,7 +153,7 @@ public class NewRentalActivity extends AppCompatActivity {
 
             // Add the image path to object
             nrd.setImagePath(savedImagePath);
-            Toast.makeText(this, "IMAGE SAVED", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Image Saved", Toast.LENGTH_LONG).show();
         }
     }
 }
