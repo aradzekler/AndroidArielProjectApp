@@ -3,7 +3,7 @@ package com.example.androidarielprojectapp.test;
 import java.util.UUID;
 
 /**
- * simple class to store information about rentals.
+ * class to store information about rentals.
  */
 public class RegisterNewRentDataObject {
 
@@ -14,7 +14,6 @@ public class RegisterNewRentDataObject {
     String rentID;
     String notes;
     String imagePath;
-
 
 
     public RegisterNewRentDataObject() {
@@ -29,12 +28,18 @@ public class RegisterNewRentDataObject {
     }
 
 
-    public RegisterNewRentDataObject(int tool, String notes, int price) {
+    public RegisterNewRentDataObject(int tool, int price, double latitude, double longitude,
+                                     String notes, String imagePath) {
         this.tool = tool;
-        this.notes = notes;
         this.price = price;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.notes = notes;
+        this.imagePath = imagePath;
         UUID uuid = UUID.randomUUID();
-        rentID = uuid.toString();
+        rentID = uuid.toString().replace("-", "");
+
+
     }
 
     public int getTool() {
@@ -49,32 +54,32 @@ public class RegisterNewRentDataObject {
         return notes;
     }
 
-    public String getrentID() {
-        return rentID;
-    }
-
     public void setNotes(String notes) {
         this.notes = notes;
     }
 
-    public void setPrice(int price) {
-        this.price = price;
+    public String getrentID() {
+        return rentID;
     }
 
     public void setRentID(String rentID) {
         this.rentID = rentID;
     }
 
-    public void setImagePath(String path) {
-        this.imagePath = path;
-    }
-
     public String getImagePath() {
         return imagePath;
     }
 
+    public void setImagePath(String path) {
+        this.imagePath = path;
+    }
+
     public int getPrice() {
         return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
     }
 
     public void setLatitude(double lat) {

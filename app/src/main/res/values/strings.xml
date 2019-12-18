@@ -1,9 +1,3 @@
 <resources>
     <string name="app_name">AndroidArielProjectApp</string>
-    <string name="message">Message</string>
-    <string name="send">Send</string>
-    <string name="email">Email</string>
-    <string name="name">Name</string>
-    <string name="mobno">Mobile No.</string>
-    <string name="reg_no">Reg</string>
 </resources>

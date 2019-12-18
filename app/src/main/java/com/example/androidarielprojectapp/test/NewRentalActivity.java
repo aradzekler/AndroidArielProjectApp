@@ -2,7 +2,6 @@ package com.example.androidarielprojectapp.test;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -20,12 +19,12 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.androidarielprojectapp.R;
-
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -41,10 +40,10 @@ public class NewRentalActivity extends AppCompatActivity {
     private final int PICK_IMAGE_REQUEST = 1;
     private final int SCOOTER = 10;
     private final int BICYCLE = 20;
-    int tool = 00; // storing vehicle id.
-    int price = 0;
-    protected RegisterNewRentDataObject nrd = new RegisterNewRentDataObject(); // building our data object
+    //protected RegisterNewRentDataObject nrd = new RegisterNewRentDataObject(); // building our data object
     protected String imagePath = "";
+    int tool = 0; // storing vehicle id.
+    int price = 0;
     //TODO: image server for handling images.
 
     @Override
@@ -81,7 +80,7 @@ public class NewRentalActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 String notes = notesText.getText().toString();
-                if (!priceText.getText().toString().isEmpty()) {
+                if (!priceText.getText().toString().isEmpty()) { // if price is not empty.
                     price = Integer.parseInt(priceText.getText().toString());
                 }
 
@@ -92,15 +91,11 @@ public class NewRentalActivity extends AppCompatActivity {
                 } else if (biBtn.isChecked()) {
                     tool = BICYCLE;
                 }
-                nrd.setLatitude(loc[0]);
-                nrd.setLongitude(loc[1]);
-                nrd.setNotes(notes);
-                nrd.setPrice(price);
-                nrd.setTool(tool);
-                nrd.setImagePath(imagePath);
-                mDatabase.child("rents").child(nrd.getrentID()).setValue(nrd);
+                RegisterNewRentDataObject newRegisterObj = new RegisterNewRentDataObject(tool, price, loc[0],
+                        loc[1], notes, imagePath);
+                mDatabase.child("rents").child(newRegisterObj.getrentID()).setValue(newRegisterObj);
 
-                if(toast != null) {
+                if (toast != null) {
                     toast.show();
                 }
 
@@ -162,19 +157,19 @@ public class NewRentalActivity extends AppCompatActivity {
         final File storageDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() +
                 "/Pics");
 
-            File imageFile = new File(storageDir, imageFileName);
-            savedImagePath = imageFile.getAbsolutePath();
-            try {
-                OutputStream fOut = new FileOutputStream(imageFile);
-                resource.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
-                fOut.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        File imageFile = new File(storageDir, imageFileName);
+        savedImagePath = imageFile.getAbsolutePath();
+        try {
+            OutputStream fOut = new FileOutputStream(imageFile);
+            resource.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
+            fOut.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-            // Add the image path to object
-            imagePath = savedImagePath;
-            Toast.makeText(this, "Image Saved", Toast.LENGTH_LONG).show();
+        // Add the image path to object
+        imagePath = savedImagePath;
+        Toast.makeText(this, "Image Saved", Toast.LENGTH_LONG).show();
 
     }
 

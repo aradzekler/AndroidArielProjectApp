@@ -25,7 +25,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
                 app:layout_constraintBottom_toTopOf="@+id/add_img_btn"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintEnd_toEndOf="parent" />
 
 
             <Button
@@ -117,20 +117,21 @@
 
             <EditText
                 android:id="@+id/notes_text_input"
-                android:layout_height="wrap_content"
                 android:layout_width="match_parent"
-                android:inputType="text"
-                android:layout_toRightOf="@+id/notes_textview" />
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/notes_textview"
+                android:inputType="text" />
 
         </RelativeLayout>
 
 
-        <Button android:id="@+id/reg_btn"
+        <Button
+            android:id="@+id/reg_btn"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Register Vehicle"
             android:layout_marginTop="3dp"
-            android:textColor="@android:color/black"/>
+            android:text="Register Vehicle"
+            android:textColor="@android:color/black" />
     </LinearLayout>
 
 </LinearLayout>

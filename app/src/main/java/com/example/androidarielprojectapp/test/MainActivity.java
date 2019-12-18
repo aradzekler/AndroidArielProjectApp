@@ -1,21 +1,16 @@
 package com.example.androidarielprojectapp.test;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.androidarielprojectapp.R;
 
 /**
  * our main activity screen
- *
  */
 public class MainActivity extends AppCompatActivity {
 
@@ -28,9 +23,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        userRentButton = (Button)findViewById(R.id.userRentButton);
-        superRentButton = (Button)findViewById(R.id.superRentButton);
-        logInButton = (Button)findViewById(R.id.logInButton);
+        userRentButton = (Button) findViewById(R.id.userRentButton);
+        superRentButton = (Button) findViewById(R.id.superRentButton);
+        logInButton = (Button) findViewById(R.id.logInButton);
 
 
         userRentButton.setOnClickListener(new View.OnClickListener() {
@@ -38,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                Intent i = new Intent(getApplicationContext(),UserRentActivity.class);
+                Intent i = new Intent(getApplicationContext(), UserRentActivity.class);
                 startActivity(i);
             }
         });
@@ -49,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                Intent i = new Intent(getApplicationContext(),MapsActivity.class);
+                Intent i = new Intent(getApplicationContext(), MapsActivity.class);
                 startActivity(i);
             }
         });
@@ -60,14 +55,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                Intent i = new Intent(getApplicationContext(),LogInActivity.class);
+                Intent i = new Intent(getApplicationContext(), LogInActivity.class);
                 startActivity(i);
             }
         });
 
 
     }
-
 
 
 }

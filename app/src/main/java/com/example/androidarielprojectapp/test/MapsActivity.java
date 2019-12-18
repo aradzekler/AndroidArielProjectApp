@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
@@ -40,8 +39,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     Marker mCurrLocationMarker; // our current location
     GoogleApiClient mGoogleApiClient;
     LocationRequest mLocationRequest;
-    private GoogleMap mMap;
     Button newRentalActivityButton;
+    private GoogleMap mMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +51,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        newRentalActivityButton = (Button)findViewById(R.id.new_rent_activity_button);
+        newRentalActivityButton = (Button) findViewById(R.id.new_rent_activity_button);
+        //TODO: allow only registered users to access registering.
 
     }
 
@@ -67,8 +67,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 buildGoogleApiClient();
                 mMap.setMyLocationEnabled(true);
             }
-        }
-        else {
+        } else {
             buildGoogleApiClient();
             mMap.setMyLocationEnabled(true);
         }
@@ -80,14 +79,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                 // Creating a marker
                 MarkerOptions markerOptions = new MarkerOptions();
-
-                // Setting the position for the marker
-                markerOptions.position(latLng);
-
-                // Setting the title for the marker.
-                // This will be displayed on taping the marker
-                //markerOptions.title(latLng.latitude + " : " + latLng.longitude);
-                markerOptions.title("You are Here");
+                markerOptions.position(latLng).title("Rent Location")
+                        .snippet("the current location of your rental")
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.map_icon_2));
 
                 // Clears the previously touched position
                 mMap.clear();
@@ -97,6 +91,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                 // Placing a marker on the touched position
                 mMap.addMarker(markerOptions);
+
             }
         });
 
@@ -108,7 +103,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onClick(View v) {
                 // TODO Auto-generated method stub
                 Intent i = new Intent(getApplicationContext(), NewRentalActivity.class);
-                double[] coor = {mCurrLocationMarker.getPosition().latitude,mCurrLocationMarker.getPosition().longitude};
+                double[] coor = {mCurrLocationMarker.getPosition().latitude, mCurrLocationMarker.getPosition().longitude};
                 i.putExtra("RENTAL_LOCATION", coor);
                 startActivity(i);
 
@@ -117,6 +112,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
     }
+
     protected synchronized void buildGoogleApiClient() {
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
@@ -155,9 +151,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         //Place current location marker
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
         MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.position(latLng);
-        markerOptions.title("You are Here");
-        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+        markerOptions.position(latLng).title("Rent Location")
+                .snippet("the current location of your rental")
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.map_icon_2));
         mCurrLocationMarker = mMap.addMarker(markerOptions);
 
         //move map camera
