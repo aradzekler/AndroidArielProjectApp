@@ -30,7 +30,7 @@
 
             <Button
                 android:id="@+id/add_img_btn"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Add Image"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -88,11 +88,12 @@
                 android:fontFeatureSettings="text"
                 android:paddingRight="15dp"
                 android:text="Price Per Hour:"
-                android:textSize="20dp" />
+                android:textSize="20dp"
+                android:hint="Price in NIS"/>
 
             <EditText
                 android:id="@+id/price_text_input"
-                android:layout_width="match_parent"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/price_textview"
                 android:inputType="numberSigned" />
@@ -130,7 +131,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
-            android:text="Register Vehicle"
+            android:text="Register For Rent"
             android:textColor="@android:color/black" />
     </LinearLayout>
 

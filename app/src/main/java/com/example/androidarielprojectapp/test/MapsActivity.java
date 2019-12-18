@@ -27,6 +27,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
+
 
 /**
  * Activity for setting up a map
@@ -41,6 +43,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     LocationRequest mLocationRequest;
     Button newRentalActivityButton;
     private GoogleMap mMap;
+    ArrayList<Marker> markersToClear = new ArrayList<Marker>(); // arraylist for clearing markers from the map
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,32 +68,38 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     Manifest.permission.ACCESS_FINE_LOCATION)
                     == PackageManager.PERMISSION_GRANTED) {
                 buildGoogleApiClient();
-                mMap.setMyLocationEnabled(true);
+                mMap.setMyLocationEnabled(false);
             }
         } else {
             buildGoogleApiClient();
-            mMap.setMyLocationEnabled(true);
+            mMap.setMyLocationEnabled(false);
         }
 
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
 
             @Override
             public void onMapClick(LatLng latLng) {
-
+                Marker mapMarker;
                 // Creating a marker
                 MarkerOptions markerOptions = new MarkerOptions();
                 markerOptions.position(latLng).title("Rent Location")
                         .snippet("the current location of your rental")
-                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.map_icon_2));
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.map_icon_2))
+                        .draggable(true)
+                        .anchor(0.5f,0.5f);
+
 
                 // Clears the previously touched position
-                mMap.clear();
+                for (Marker marker : markersToClear) {
+                    marker.remove();
+                }
+
+                mapMarker = mMap.addMarker(markerOptions);
+                markersToClear.add(mapMarker);
 
                 // Animating to the touched position
                 mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
 
-                // Placing a marker on the touched position
-                mMap.addMarker(markerOptions);
 
             }
         });
@@ -106,7 +115,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 double[] coor = {mCurrLocationMarker.getPosition().latitude, mCurrLocationMarker.getPosition().longitude};
                 i.putExtra("RENTAL_LOCATION", coor);
                 startActivity(i);
-
             }
         });
 
@@ -151,9 +159,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         //Place current location marker
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
         MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.position(latLng).title("Rent Location")
-                .snippet("the current location of your rental")
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.map_icon_2));
+        markerOptions.position(latLng).title("You are here!")
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.map_marker_3))
+                .draggable(false)
+                .anchor(0.5f,0.5f);
         mCurrLocationMarker = mMap.addMarker(markerOptions);
 
         //move map camera

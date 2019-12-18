@@ -40,8 +40,7 @@ public class NewRentalActivity extends AppCompatActivity {
     private final int PICK_IMAGE_REQUEST = 1;
     private final int SCOOTER = 10;
     private final int BICYCLE = 20;
-    //protected RegisterNewRentDataObject nrd = new RegisterNewRentDataObject(); // building our data object
-    protected String imagePath = "";
+    private String imagePath = "";
     int tool = 0; // storing vehicle id.
     int price = 0;
     //TODO: image server for handling images.
@@ -61,7 +60,7 @@ public class NewRentalActivity extends AppCompatActivity {
         final DatabaseReference mDatabase;
         Intent intent = getIntent();
         final double[] loc = intent.getDoubleArrayExtra("RENTAL_LOCATION");
-        final Toast toast = Toast.makeText(this, "Your rent has been registered.", Toast.LENGTH_LONG);
+        final Toast rentRegisterToast = Toast.makeText(this, "Your rent has been registered.", Toast.LENGTH_LONG);
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
 
@@ -78,26 +77,20 @@ public class NewRentalActivity extends AppCompatActivity {
         registerVe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 String notes = notesText.getText().toString();
-                if (!priceText.getText().toString().isEmpty()) { // if price is not empty.
+
+                if (!priceText.getText().toString().isEmpty()) { // if price is not an empty string.
                     price = Integer.parseInt(priceText.getText().toString());
                 }
-
-                if (rg.getCheckedRadioButtonId() == -1) {
-                    // no radio buttons are checked
-                } else if (scooterBtn.isChecked()) {
+                if  (scooterBtn.isChecked()) {
                     tool = SCOOTER;
                 } else if (biBtn.isChecked()) {
                     tool = BICYCLE;
                 }
                 RegisterNewRentDataObject newRegisterObj = new RegisterNewRentDataObject(tool, price, loc[0],
-                        loc[1], notes, imagePath);
+                        loc[1], notes, imagePath); // creating data object and filling with data.
                 mDatabase.child("rents").child(newRegisterObj.getrentID()).setValue(newRegisterObj);
-
-                if (toast != null) {
-                    toast.show();
-                }
+                rentRegisterToast.show();
 
                 // in order to read to data
                 ValueEventListener postListener = new ValueEventListener() {
@@ -107,7 +100,6 @@ public class NewRentalActivity extends AppCompatActivity {
                         RegisterNewRentDataObject user = dataSnapshot.getValue(RegisterNewRentDataObject.class);
                         // not working yet.
                     }
-
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
                         // Getting Post failed, log a message
@@ -170,7 +162,6 @@ public class NewRentalActivity extends AppCompatActivity {
         // Add the image path to object
         imagePath = savedImagePath;
         Toast.makeText(this, "Image Saved", Toast.LENGTH_LONG).show();
-
     }
 
 
