@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,14 +20,17 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.androidarielprojectapp.R;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
+import com.google.firebase.database.ValueEventListener;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Random;
+
 
 /**
  * activity for renting out and registering the rent.
@@ -34,13 +38,14 @@ import java.util.Random;
 public class NewRentalActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
-
     private final int PICK_IMAGE_REQUEST = 1;
     private final int SCOOTER = 10;
     private final int BICYCLE = 20;
-    private String userId = "00000";
     int tool = 00; // storing vehicle id.
+    int price = 0;
     protected RegisterNewRentDataObject nrd = new RegisterNewRentDataObject(); // building our data object
+    protected String imagePath = "";
+    //TODO: image server for handling images.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,11 +60,11 @@ public class NewRentalActivity extends AppCompatActivity {
         final RadioButton scooterBtn = (RadioButton) findViewById(R.id.scooter_radio_btn);
         final RadioButton biBtn = (RadioButton) findViewById(R.id.bicycle_radio_btn);
         final DatabaseReference mDatabase;
-        final DatabaseReference mDatabaseUsers;
+        Intent intent = getIntent();
+        final double[] loc = intent.getDoubleArrayExtra("RENTAL_LOCATION");
+        final Toast toast = Toast.makeText(this, "Your rent has been registered.", Toast.LENGTH_LONG);
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        mDatabase = FirebaseDatabase.getInstance().getReference(); // reference to database
-
-        mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Users").child(userId); // reference to users.
 
         // when select image button is clicked.
         selectImage.setOnClickListener(new View.OnClickListener() {
@@ -69,18 +74,15 @@ public class NewRentalActivity extends AppCompatActivity {
             }
         });
 
+
         // register the information and pass to database
         registerVe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String notes = notesText.getText().toString();
-                String price = priceText.getText().toString();
 
-                try {
-                    int finalPrice=Integer.parseInt(price);
-                    nrd.setPrice(finalPrice);
-                } catch(NumberFormatException ex) { // handle your exception
-                    //
+                String notes = notesText.getText().toString();
+                if (!priceText.getText().toString().isEmpty()) {
+                    price = Integer.parseInt(priceText.getText().toString());
                 }
 
                 if (rg.getCheckedRadioButtonId() == -1) {
@@ -90,13 +92,39 @@ public class NewRentalActivity extends AppCompatActivity {
                 } else if (biBtn.isChecked()) {
                     tool = BICYCLE;
                 }
+                nrd.setLatitude(loc[0]);
+                nrd.setLongitude(loc[1]);
                 nrd.setNotes(notes);
-                //TODO: handle data with firebase, make sure data is processed correcrly
-                mDatabaseUsers.child("tool").setValue(nrd.getTool());
+                nrd.setPrice(price);
+                nrd.setTool(tool);
+                nrd.setImagePath(imagePath);
+                mDatabase.child("rents").child(nrd.getrentID()).setValue(nrd);
 
-                Toast.makeText(getApplicationContext(), "Data Saved", Toast.LENGTH_SHORT).show();
+                if(toast != null) {
+                    toast.show();
+                }
+
+                // in order to read to data
+                ValueEventListener postListener = new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        // Get Post object and use the values to update the UI
+                        RegisterNewRentDataObject user = dataSnapshot.getValue(RegisterNewRentDataObject.class);
+                        // not working yet.
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        // Getting Post failed, log a message
+                        Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
+                        // ...
+                    }
+                };
+                mDatabase.addValueEventListener(postListener);
             }
+
         });
+
     }
 
     // intent for choosing an image, launching onActivityResult.
@@ -129,18 +157,11 @@ public class NewRentalActivity extends AppCompatActivity {
 
     // saving the image to data object used inside onActivityResult
     private void saveImage(Bitmap resource) {
-
         String savedImagePath = null;
-        String imageFileName =  "image" + ".jpg";
+        String imageFileName = "image" + ".jpg";
         final File storageDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() +
                 "/Pics");
 
-        boolean success = true;
-        if (!storageDir.exists()) {
-            success = storageDir.mkdirs();
-        }
-
-        if (success) {
             File imageFile = new File(storageDir, imageFileName);
             savedImagePath = imageFile.getAbsolutePath();
             try {
@@ -152,8 +173,10 @@ public class NewRentalActivity extends AppCompatActivity {
             }
 
             // Add the image path to object
-            nrd.setImagePath(savedImagePath);
+            imagePath = savedImagePath;
             Toast.makeText(this, "Image Saved", Toast.LENGTH_LONG).show();
-        }
+
     }
+
+
 }

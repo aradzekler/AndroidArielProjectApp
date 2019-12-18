@@ -108,7 +108,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onClick(View v) {
                 // TODO Auto-generated method stub
                 Intent i = new Intent(getApplicationContext(), NewRentalActivity.class);
-                i.putExtra("RENTAL_LOCATION", mCurrLocationMarker.getPosition());
+                double[] coor = {mCurrLocationMarker.getPosition().latitude,mCurrLocationMarker.getPosition().longitude};
+                i.putExtra("RENTAL_LOCATION", coor);
                 startActivity(i);
 
             }

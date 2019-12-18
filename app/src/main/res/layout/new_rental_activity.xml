@@ -87,7 +87,7 @@
                 android:layout_height="wrap_content"
                 android:fontFeatureSettings="text"
                 android:paddingRight="15dp"
-                android:text="Price:"
+                android:text="Price Per Hour:"
                 android:textSize="20dp" />
 
             <EditText
@@ -95,7 +95,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/price_textview"
-                android:inputType="text" />
+                android:inputType="numberSigned" />
 
         </RelativeLayout>
 
