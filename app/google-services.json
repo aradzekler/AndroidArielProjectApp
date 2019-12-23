@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "235597903193",
+    "firebase_url": "https://android-arielu-project.firebaseio.com",
+    "project_id": "android-arielu-project",
+    "storage_bucket": "android-arielu-project.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:235597903193:android:517fdea987aad0791d8848",
+        "android_client_info": {
+          "package_name": "com.example.androidarielprojectapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "235597903193-ag59h33b6n0l622mo0hdj02l2m0p991j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_cmV_lm0ibH6C-ygMPzCjr6c7tc6W36E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "235597903193-ag59h33b6n0l622mo0hdj02l2m0p991j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
