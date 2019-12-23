@@ -3,7 +3,9 @@ package com.example.androidarielprojectapp.test;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -17,11 +19,13 @@ public class MainActivity extends AppCompatActivity {
     Button userRentButton;
     Button superRentButton;
     Button logInButton;
+    boolean regStatus = true; // if the user is registered it will be turned on. false by default. true for testing.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         userRentButton = (Button) findViewById(R.id.userRentButton);
         superRentButton = (Button) findViewById(R.id.superRentButton);
@@ -44,8 +48,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                Intent i = new Intent(getApplicationContext(), MapsActivity.class);
-                startActivity(i);
+                if (regStatus) {
+                    Intent i = new Intent(getApplicationContext(), MapsActivity.class);
+                    startActivity(i);
+                }
+                else {
+                    Toast.makeText(MainActivity.this, "Register in order to rent.", Toast.LENGTH_LONG).show();
+                }
             }
         });
 

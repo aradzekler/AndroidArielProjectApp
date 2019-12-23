@@ -7,13 +7,13 @@ import java.util.UUID;
  */
 public class RegisterNewRentDataObject {
 
-    int tool;
-    int price = 0;
-    double latitude;
-    double longitude;
-    String rentID;
-    String notes;
-    String imagePath;
+    private int tool;
+    private int price = 0;
+    private double latitude;
+    private double longitude;
+    private String rentID;
+    private String notes;
+    private String imagePath;
 
 
     public RegisterNewRentDataObject() {
