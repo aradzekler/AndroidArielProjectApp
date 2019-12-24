@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/blue_background"
-    tools:context=".Login" >
+    tools:context=".test.Login" >
 
     <TextView
         android:id="@+id/headline"
@@ -60,14 +60,12 @@
         android:layout_width="379dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
         android:layout_marginTop="36dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
         android:background="#070707"
         android:ems="10"
         android:hint="Password:"
-        android:inputType="number"
+        android:inputType="textPersonName|textPassword"
         android:padding="10dp"
         android:textColor="#FFFFFF"
         android:textColorHint="#FFFFFF"

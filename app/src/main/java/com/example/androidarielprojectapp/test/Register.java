@@ -109,7 +109,9 @@ public class Register extends AppCompatActivity {
         myLoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                progressBar.setVisibility(View.VISIBLE);
                 startActivity(new Intent(getApplicationContext(),Login.class));
+                progressBar.setVisibility(View.GONE);
             }
         });
 

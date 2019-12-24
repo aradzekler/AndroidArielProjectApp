@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/blue_background"
-    tools:context=".Register">
+    tools:context=".test.Register">
 
     <TextView
         android:id="@+id/headline"
@@ -38,16 +38,14 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
         android:layout_marginTop="60dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
         android:background="#070707"
         android:ems="10"
         android:hint="Full Name:"
         android:inputType="textPersonName"
         android:padding="10dp"
-        android:textColor="#D4D4BE"
+        android:textColor="#FFFFFF"
         android:textColorHint="#FFFFFF"
         app:fontFamily="@font/aclonica"
         app:layout_constraintEnd_toEndOf="parent"

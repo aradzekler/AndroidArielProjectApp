@@ -64,8 +64,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                Intent i = new Intent(getApplicationContext(), LogInActivity.class);
-                startActivity(i);
+                startActivity(new Intent(getApplicationContext(),Login.class));
             }
         });
 

@@ -32,7 +32,7 @@ public class Login extends AppCompatActivity {
     ProgressBar myProgressBar;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
@@ -90,7 +90,7 @@ public class Login extends AppCompatActivity {
                                     // Sign in success, update UI with the signed-in user's information
                                     Toast.makeText(Login.this, "User logged in succesfuly!", Toast.LENGTH_LONG).show();
                                     Log.d(TAG, "createUserWithEmail:success");
-                                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                    startActivity(new Intent(getApplicationContext(),MainActivity.class));
                                 } else {
                                     // If sign in fails, display a message to the user.
                                     Toast.makeText(Login.this, "User login failed!" + task.getException().getMessage(), Toast.LENGTH_LONG).show();

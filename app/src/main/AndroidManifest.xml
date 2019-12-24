@@ -9,18 +9,20 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".test.MainActivity">
+        <activity android:name="test.Register">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".test.LogInActivity" />
         <activity android:name=".test.SuperRentActivity" />
         <activity android:name=".test.UserRentActivity" />
         <activity android:name=".test.MapsActivity" />
         <activity android:name=".test.NewRentalActivity" />
+        <activity android:name="test.Login" />
+        <activity android:name=".test.MainActivity" />
+
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
