@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">AndroidArielProjectApp</string>
+    <string name="Search">Search</string>
+    <string name="logout">Logout</string>
 </resources>

@@ -9,7 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="test.Register">
+        <activity android:name=".test.Login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -20,7 +20,7 @@
         <activity android:name=".test.UserRentActivity" />
         <activity android:name=".test.MapsActivity" />
         <activity android:name=".test.NewRentalActivity" />
-        <activity android:name="test.Login" />
+        <activity android:name=".test.Register" />
         <activity android:name=".test.MainActivity" />
 
 
