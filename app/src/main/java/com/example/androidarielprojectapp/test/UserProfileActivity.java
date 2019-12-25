@@ -17,7 +17,7 @@ import android.widget.TextView;
 
 import javax.annotation.Nullable;
 
-public class UserProfile extends AppCompatActivity {
+public class UserProfileActivity extends AppCompatActivity {
 
     TextView headLine,fullName,email,phoneNumber,id;
     FirebaseAuth fAuth;
