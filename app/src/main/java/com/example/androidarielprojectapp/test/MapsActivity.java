@@ -3,12 +3,14 @@ package com.example.androidarielprojectapp.test;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Criteria;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
@@ -16,6 +18,7 @@ import androidx.fragment.app.FragmentActivity;
 import com.example.androidarielprojectapp.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
@@ -27,6 +30,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.util.ArrayList;
 
@@ -44,6 +48,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     LocationRequest mLocationRequest;
     Button newRentalActivityButton;
     private GoogleMap mMap;
+    private FusedLocationProviderClient fusedLocationClient;
+
     ArrayList<Marker> markersToClear = new ArrayList<Marker>(); // arraylist for clearing markers from the map
 
     @Override
@@ -52,9 +58,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_maps);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
 
         newRentalActivityButton = (Button) findViewById(R.id.new_rent_activity_button);
         //TODO: allow only registered users to access registering.
@@ -70,12 +79,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     Manifest.permission.ACCESS_FINE_LOCATION)
                     == PackageManager.PERMISSION_GRANTED) {
                 buildGoogleApiClient();
-                mMap.setMyLocationEnabled(false);
+                mMap.setMyLocationEnabled(true);
             }
         } else {
             buildGoogleApiClient();
-            mMap.setMyLocationEnabled(false);
+            mMap.setMyLocationEnabled(true);
         }
+
 
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
 
@@ -114,8 +124,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onClick(View v) {
                 // TODO Auto-generated method stub
                 Intent i = new Intent(getApplicationContext(), NewRentalActivity.class);
-                double[] coor = {mCurrLocationMarker.getPosition().latitude, mCurrLocationMarker.getPosition().longitude};
-                i.putExtra("RENTAL_LOCATION", coor);
+                try {
+                    double[] coor = {mCurrLocationMarker.getPosition().latitude, mCurrLocationMarker.getPosition().longitude};
+                    i.putExtra("RENTAL_LOCATION", coor);
+                }
+                catch (NullPointerException npe) {
+                    npe.printStackTrace();
+                }
                 startActivity(i);
             }
         });
@@ -154,10 +169,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onLocationChanged(Location location) {
         mLastLocation = location;
-
         if (mCurrLocationMarker != null) {
             mCurrLocationMarker.remove();
         }
+
         //Place current location marker
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
         MarkerOptions markerOptions = new MarkerOptions();
@@ -165,7 +180,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.map_marker_3))
                 .draggable(false)
                 .anchor(0.5f,0.5f);
-        mCurrLocationMarker = mMap.addMarker(markerOptions);
+        try {
+            mCurrLocationMarker = mMap.addMarker(markerOptions);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
 
         //move map camera
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
