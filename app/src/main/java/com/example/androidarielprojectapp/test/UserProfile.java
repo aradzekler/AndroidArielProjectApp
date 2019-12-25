@@ -23,7 +23,7 @@ public class UserProfile extends AppCompatActivity {
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
     String userID;
-    Button logOut;
+    Button goBack;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -35,7 +35,7 @@ public class UserProfile extends AppCompatActivity {
         email=findViewById(R.id.userEmail);
         phoneNumber=findViewById(R.id.userPhone);
         id=findViewById(R.id.userId);
-        logOut=findViewById(R.id.logOutBtn);
+        goBack=findViewById(R.id.goBack);
 
         fAuth=FirebaseAuth.getInstance();
         fStore=FirebaseFirestore.getInstance();
@@ -53,7 +53,7 @@ public class UserProfile extends AppCompatActivity {
             }
         });
 
-        logOut.setOnClickListener(new View.OnClickListener() {
+        goBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(),MainActivity.class));
