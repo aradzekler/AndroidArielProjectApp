@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                    Intent i = new Intent(getApplicationContext(), Login.class);
+                    Intent i = new Intent(getApplicationContext(), LoginActivity.class);
                     startActivity(i);
             }
         });
@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(i);
                 }
                 else {
-                    Toast.makeText(MainActivity.this, "Register in order to rent.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(MainActivity.this, "RegisterActivity in order to rent.", Toast.LENGTH_LONG).show();
                 }
             }
         });

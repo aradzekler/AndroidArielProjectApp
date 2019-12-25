@@ -21,7 +21,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class Login extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
 
     //declaring relevant variables
     private static String TAG;
@@ -62,19 +62,19 @@ public class Login extends AppCompatActivity {
 
                 //if the user entered empty email adress , an error will appear.
                 if(TextUtils.isEmpty(email)){
-                    Toast.makeText(Login.this, "email is required!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(LoginActivity.this, "email is required!", Toast.LENGTH_LONG).show();
                     myEmail.setError("email is required!");
                     return;
                 }
                 //if the user entered empty password , an error will appear.
                 if(TextUtils.isEmpty(password)){
-                    Toast.makeText(Login.this, "password is required!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(LoginActivity.this, "password is required!", Toast.LENGTH_LONG).show();
                     myPassword.setError("password is required!");
                     return;
                 }
                 //if the user entered password containing less than 6 characters , an error will appear.
                 if(password.length()<6){
-                    Toast.makeText(Login.this, "password most be at least 6 characters!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(LoginActivity.this, "password most be at least 6 characters!", Toast.LENGTH_LONG).show();
                     myPassword.setError("password most be at least 6 characters!");
                     return;
                 }
@@ -83,17 +83,17 @@ public class Login extends AppCompatActivity {
 
                 //login with an email and a password .
                 myAuth.signInWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(Login.this, new OnCompleteListener<AuthResult>() {
+                        .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
                                     // Sign in success, update UI with the signed-in user's information
-                                    Toast.makeText(Login.this, "User logged in succesfuly!", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(LoginActivity.this, "User logged in succesfuly!", Toast.LENGTH_LONG).show();
                                     Log.d(TAG, "createUserWithEmail:success");
                                     startActivity(new Intent(getApplicationContext(),MainActivity.class));
                                 } else {
                                     // If sign in fails, display a message to the user.
-                                    Toast.makeText(Login.this, "User login failed!" + task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                                    Toast.makeText(LoginActivity.this, "User login failed!" + task.getException().getMessage(), Toast.LENGTH_LONG).show();
                                     Log.w(TAG, "createUserWithEmail:failure", task.getException());
                                     myProgressBar.setVisibility(View.GONE);
                                 }
@@ -107,7 +107,7 @@ public class Login extends AppCompatActivity {
         myCreateAccountBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(),Register.class));
+                startActivity(new Intent(getApplicationContext(), RegisterActivity.class));
             }
         });
 

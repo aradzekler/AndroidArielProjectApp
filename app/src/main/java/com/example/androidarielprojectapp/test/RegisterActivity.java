@@ -28,7 +28,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Register extends AppCompatActivity {
+public class RegisterActivity extends AppCompatActivity {
 
     //declaring relevant variables
     private static String TAG="RegisterActivity";
@@ -75,19 +75,19 @@ public class Register extends AppCompatActivity {
 
                 //if the user entered empty email adress , an error will appear.
                 if(TextUtils.isEmpty(email)){
-                    Toast.makeText(Register.this, "email is required!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(RegisterActivity.this, "email is required!", Toast.LENGTH_LONG).show();
                     myEmail.setError("email is required!");
                     return;
                 }
                 //if the user entered empty password , an error will appear.
                 if(TextUtils.isEmpty(password)){
-                    Toast.makeText(Register.this, "password is required!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(RegisterActivity.this, "password is required!", Toast.LENGTH_LONG).show();
                     myPassword.setError("password is required!");
                     return;
                 }
                 //if the user entered password containing less than 6 characters , an error will appear.
                 if(password.length()<6){
-                    Toast.makeText(Register.this, "password most be at least 6 characters!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(RegisterActivity.this, "password most be at least 6 characters!", Toast.LENGTH_LONG).show();
                     myPassword.setError("password most be at least 6 characters!");
                     return;
                 }
@@ -96,13 +96,13 @@ public class Register extends AppCompatActivity {
                 progressBar.setVisibility(View.VISIBLE);
                 //create account with a full name,email,phone number and password.
                 mAuth.createUserWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(Register.this, new OnCompleteListener<AuthResult>() {
+                        .addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
 
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
                                     // Sign in success, update UI with the signed-in user's information
-                                    Toast.makeText(Register.this, "User created!", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(RegisterActivity.this, "User created!", Toast.LENGTH_SHORT).show();
                                     Log.d(TAG, "createUserWithEmail:success");
                                     userID=mAuth.getCurrentUser().getUid();
                                     DocumentReference documernRef=fStore.collection("users").document(userID);
@@ -114,19 +114,19 @@ public class Register extends AppCompatActivity {
 
                                         @Override
                                         public void onSuccess(Void aVoid) {
-                                            Toast.makeText(Register.this,fullName+" user profile is created with id:"+userID, Toast.LENGTH_LONG).show();
+                                            Toast.makeText(RegisterActivity.this,fullName+" user profile is created with id:"+userID, Toast.LENGTH_LONG).show();
                                         }
                                     }).addOnFailureListener(new OnFailureListener() {
                                         @Override
                                         public void onFailure(@NonNull Exception e) {
-                                            Toast.makeText(Register.this, "Error "+e.getMessage(), Toast.LENGTH_LONG).show();
+                                            Toast.makeText(RegisterActivity.this, "Error "+e.getMessage(), Toast.LENGTH_LONG).show();
                                         }
                                     });
-                                    Toast.makeText(Register.this, fullName+" Welcome to EasyRent!", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(RegisterActivity.this, fullName+" Welcome to EasyRent!", Toast.LENGTH_SHORT).show();
                                     finish();
                                 } else {
                                     // If sign in fails, display a message to the user.
-                                    Toast.makeText(Register.this, "User creation failed!"+task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                                    Toast.makeText(RegisterActivity.this, "User creation failed!"+task.getException().getMessage(), Toast.LENGTH_LONG).show();
                                     Log.w(TAG, "createUserWithEmail:failure"+task.getException().getMessage(), task.getException());
                                     progressBar.setVisibility(View.GONE);
                                 }
@@ -140,7 +140,7 @@ public class Register extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 progressBar.setVisibility(View.VISIBLE);
-                startActivity(new Intent(getApplicationContext(),Login.class));
+                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                 progressBar.setVisibility(View.GONE);
             }
         });

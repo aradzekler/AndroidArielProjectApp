@@ -19,7 +19,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".test.UserProfile"></activity>
-        <activity android:name=".test.Login">
+        <activity android:name=".test.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -30,7 +30,7 @@
         <activity android:name=".test.UserRentActivity" />
         <activity android:name=".test.MapsActivity" />
         <activity android:name=".test.NewRentalActivity" />
-        <activity android:name=".test.Register" />
+        <activity android:name=".test.RegisterActivity" />
         <activity android:name=".test.MainActivity" />
 
         <meta-data
