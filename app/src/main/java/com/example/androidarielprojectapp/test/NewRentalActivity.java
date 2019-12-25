@@ -56,6 +56,7 @@ public class NewRentalActivity extends AppCompatActivity {
 
 
     //TODO: image server for handling images.
+    //TODO: treat phone number as regular and not authenticated with FAuth
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
