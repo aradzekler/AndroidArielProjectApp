@@ -41,9 +41,9 @@ public class Register extends AppCompatActivity {
         myEmail=findViewById(R.id.email);
         myPhoneNumber=findViewById(R.id.phone_number);
         myPassword=findViewById(R.id.password);
-        myPassword.setTransformationMethod(new AsteriskPasswordTransformationMethod());
         myRegisterBtn=findViewById(R.id.register_button);
         myLoginBtn=findViewById(R.id.already_registered);
+        myPassword.setTransformationMethod(new AsteriskPasswordTransformationMethod());
         mAuth=FirebaseAuth.getInstance();
         progressBar=findViewById(R.id.progressBar);
 
@@ -93,7 +93,7 @@ public class Register extends AppCompatActivity {
                                     // Sign in success, update UI with the signed-in user's information
                                     Toast.makeText(Register.this, "User created!", Toast.LENGTH_SHORT).show();
                                     Log.d(TAG, "createUserWithEmail:success");
-                                    startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                                    finish();
                                 } else {
                                     // If sign in fails, display a message to the user.
                                     Toast.makeText(Register.this, "User creation failed!"+task.getException().getMessage(), Toast.LENGTH_LONG).show();

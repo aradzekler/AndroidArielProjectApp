@@ -24,7 +24,7 @@ import com.google.firebase.auth.FirebaseAuth;
 public class Login extends AppCompatActivity {
 
     //declaring relevant variables
-    private static String TAG="LoginActivity";
+    private static String TAG;
     EditText myEmail,myPassword;
     Button myLoginBtn;
     TextView myCreateAccountBtn;
@@ -35,7 +35,7 @@ public class Login extends AppCompatActivity {
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
+        TAG="LoginActivity";
         //instantiate variables
         myEmail=findViewById(R.id.email);
         myPassword=findViewById(R.id.password);
@@ -90,6 +90,7 @@ public class Login extends AppCompatActivity {
                                     // Sign in success, update UI with the signed-in user's information
                                     Toast.makeText(Login.this, "User logged in succesfuly!", Toast.LENGTH_LONG).show();
                                     Log.d(TAG, "createUserWithEmail:success");
+
                                     startActivity(new Intent(getApplicationContext(),MainActivity.class));
                                 } else {
                                     // If sign in fails, display a message to the user.
