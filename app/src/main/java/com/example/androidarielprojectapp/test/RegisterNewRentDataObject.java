@@ -14,6 +14,8 @@ public class RegisterNewRentDataObject {
     private String rentID;
     private String notes;
     private String imagePath;
+    private String userID;
+    private String userPhone;
 
 
     public RegisterNewRentDataObject() {
@@ -29,7 +31,7 @@ public class RegisterNewRentDataObject {
 
 
     public RegisterNewRentDataObject(int tool, int price, double latitude, double longitude,
-                                     String notes, String imagePath) {
+                                     String notes, String imagePath, String userID, String userPhone) {
         this.tool = tool;
         this.price = price;
         this.latitude = latitude;
@@ -38,6 +40,8 @@ public class RegisterNewRentDataObject {
         this.imagePath = imagePath;
         UUID uuid = UUID.randomUUID();
         rentID = uuid.toString().replace("-", "");
+        this.userID = userID;
+        this.userPhone = userPhone;
 
 
     }
@@ -97,4 +101,16 @@ public class RegisterNewRentDataObject {
     public Double getLongi() {
         return longitude;
     }
+
+    public String getUserID() {
+        return this.userID;
+    }
+
+    public void setUserID() { this.userID = userID; }
+
+    public String getuserPhone() {
+        return this.userPhone;
+    }
+
+    public void setuserPhone() { this.userPhone = userPhone; }
 }

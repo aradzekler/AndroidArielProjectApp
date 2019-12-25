@@ -19,11 +19,17 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.androidarielprojectapp.R;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -41,8 +47,14 @@ public class NewRentalActivity extends AppCompatActivity {
     private final int SCOOTER = 10;
     private final int BICYCLE = 20;
     private String imagePath = "";
+    FirebaseAuth fAuth;
+    FirebaseFirestore fStore;
+    String userID;
+    String userPhone;
     int tool = 0; // storing vehicle id.
     int price = 0;
+
+
     //TODO: image server for handling images.
 
     @Override
@@ -62,7 +74,11 @@ public class NewRentalActivity extends AppCompatActivity {
         final double[] loc = intent.getDoubleArrayExtra("RENTAL_LOCATION");
         final Toast rentRegisterToast = Toast.makeText(this, "Your rent has been registered.", Toast.LENGTH_LONG);
         mDatabase = FirebaseDatabase.getInstance().getReference();
-
+        fAuth = FirebaseAuth.getInstance();
+        fStore = FirebaseFirestore.getInstance();
+        //DocumentReference documentReference = fStore.collection("users").document(userID);
+        userID = fAuth.getCurrentUser().getUid();
+        userPhone = fAuth.getCurrentUser().getPhoneNumber();
 
         // when select image button is clicked.
         selectImage.setOnClickListener(new View.OnClickListener() {
@@ -88,7 +104,7 @@ public class NewRentalActivity extends AppCompatActivity {
                     tool = BICYCLE;
                 }
                 RegisterNewRentDataObject newRegisterObj = new RegisterNewRentDataObject(tool, price, loc[0],
-                        loc[1], notes, imagePath); // creating data object and filling with data.
+                        loc[1], notes, imagePath, userID, userPhone); // creating data object and filling with data.
                 mDatabase.child("rents").child(newRegisterObj.getrentID()).setValue(newRegisterObj);
                 rentRegisterToast.show();
 
