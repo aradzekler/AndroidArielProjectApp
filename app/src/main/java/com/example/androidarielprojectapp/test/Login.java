@@ -90,7 +90,6 @@ public class Login extends AppCompatActivity {
                                     // Sign in success, update UI with the signed-in user's information
                                     Toast.makeText(Login.this, "User logged in succesfuly!", Toast.LENGTH_LONG).show();
                                     Log.d(TAG, "createUserWithEmail:success");
-
                                     startActivity(new Intent(getApplicationContext(),MainActivity.class));
                                 } else {
                                     // If sign in fails, display a message to the user.

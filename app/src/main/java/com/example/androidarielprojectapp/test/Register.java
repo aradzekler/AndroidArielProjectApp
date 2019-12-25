@@ -17,9 +17,16 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.androidarielprojectapp.R;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class Register extends AppCompatActivity {
 
@@ -30,7 +37,8 @@ public class Register extends AppCompatActivity {
     TextView myLoginBtn;
     FirebaseAuth mAuth;
     ProgressBar progressBar;
-
+    FirebaseFirestore fStore;
+    String userID;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +54,7 @@ public class Register extends AppCompatActivity {
         myPassword.setTransformationMethod(new AsteriskPasswordTransformationMethod());
         mAuth=FirebaseAuth.getInstance();
         progressBar=findViewById(R.id.progressBar);
+        fStore=FirebaseFirestore.getInstance();
 
         //if the user is already login, we adress him to the main activity.
         if(mAuth.getCurrentUser()!= null){
@@ -57,10 +66,12 @@ public class Register extends AppCompatActivity {
             @Override
 
             public void onClick(View v) {
-                String email,password;
+                final String email,password,phoneNumber,fullName;
 
                 email=myEmail.getText().toString().trim();
                 password=myPassword.getText().toString().trim();
+                phoneNumber=myPhoneNumber.getText().toString();
+                fullName=myFullName.getText().toString();
 
                 //if the user entered empty email adress , an error will appear.
                 if(TextUtils.isEmpty(email)){
@@ -93,6 +104,25 @@ public class Register extends AppCompatActivity {
                                     // Sign in success, update UI with the signed-in user's information
                                     Toast.makeText(Register.this, "User created!", Toast.LENGTH_SHORT).show();
                                     Log.d(TAG, "createUserWithEmail:success");
+                                    userID=mAuth.getCurrentUser().getUid();
+                                    DocumentReference documernRef=fStore.collection("users").document(userID);
+                                    Map<String,Object> user=new HashMap<>();
+                                    user.put("full name",fullName);
+                                    user.put("email",email);
+                                    user.put("phone number",phoneNumber);
+                                    documernRef.set(user).addOnSuccessListener(new OnSuccessListener<Void>(){
+
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            Toast.makeText(Register.this,fullName+" user profile is created with id:"+userID, Toast.LENGTH_LONG).show();
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Toast.makeText(Register.this, "Error "+e.getMessage(), Toast.LENGTH_LONG).show();
+                                        }
+                                    });
+                                    Toast.makeText(Register.this, fullName+" Welcome to EasyRent!", Toast.LENGTH_SHORT).show();
                                     finish();
                                 } else {
                                     // If sign in fails, display a message to the user.
@@ -117,6 +147,7 @@ public class Register extends AppCompatActivity {
 
 
     }
+    //methods that enable the password key more hidden and secure.
     public class AsteriskPasswordTransformationMethod extends PasswordTransformationMethod {
         @Override
         public CharSequence getTransformation(CharSequence source, View view) {

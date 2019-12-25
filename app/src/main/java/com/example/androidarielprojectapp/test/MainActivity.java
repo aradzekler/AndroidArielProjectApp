@@ -79,6 +79,9 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+    public void myProfile(View view){
+        startActivity(new Intent(getApplicationContext(),UserProfile.class));
+    }
 
 
 }
