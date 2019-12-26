@@ -1,16 +1,17 @@
 package com.example.androidarielprojectapp.test;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 /**
  * class to store information about rentals.
  */
-public class RegisterNewRentDataObject {
+public class RegisterNewRentDataObject implements Serializable {
 
     private int tool;
     private int price = 0;
-    private double latitude;
-    private double longitude;
+    private double lat;
+    private double longi;
     private String rentID;
     private String notes;
     private String imagePath;
@@ -23,19 +24,19 @@ public class RegisterNewRentDataObject {
         price = 0;
         notes = null;
         tool = 0;
-        latitude = 0;
-        longitude = 0;
+        lat = 0;
+        longi = 0;
         UUID uuid = UUID.randomUUID();
         rentID = uuid.toString().replace("-", "");
     }
 
 
-    public RegisterNewRentDataObject(int tool, int price, double latitude, double longitude,
+    public RegisterNewRentDataObject(int tool, int price, double lat, double longi,
                                      String userPhone, String imagePath, String userID) {
         this.tool = tool;
         this.price = price;
-        this.latitude = latitude;
-        this.longitude = longitude;
+        this.lat = lat;
+        this.longi = longi;
         this.notes = notes;
         this.imagePath = imagePath;
         UUID uuid = UUID.randomUUID();
@@ -86,20 +87,18 @@ public class RegisterNewRentDataObject {
         this.price = price;
     }
 
-    public void setLatitude(double lat) {
-        this.latitude = lat;
+    public void setLat(double lat) {
+        this.lat = lat;
     }
 
-    public void setLongitude(double longi) {
-        this.longitude = longi;
-    }
+    public void setLongi(double longi) { this.longi = longi; }
 
     public Double getLat() {
-        return latitude;
+        return lat;
     }
 
     public Double getLongi() {
-        return longitude;
+        return longi;
     }
 
     public String getUserID() {
