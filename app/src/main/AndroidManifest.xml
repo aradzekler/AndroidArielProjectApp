@@ -28,6 +28,7 @@
         <activity android:name=".test.SuperRentActivity" />
         <activity android:name=".test.UserRentActivity" />
         <activity android:name=".test.MapsActivity" />
+        <activity android:name=".test.MapsRentalActivity" />
         <activity android:name=".test.NewRentalActivity" />
         <activity android:name=".test.RegisterActivity" />
         <activity android:name=".test.MainActivity" />
