@@ -49,6 +49,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     Button newRentalActivityButton;
     private GoogleMap mMap;
     private FusedLocationProviderClient fusedLocationClient;
+    private int MY_PERMISSION_CODE = 666;
 
     ArrayList<Marker> markersToClear = new ArrayList<Marker>(); // arraylist for clearing markers from the map
 
@@ -74,15 +75,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         System.out.println(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION));
+        System.out.println(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION));
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
                     ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 buildGoogleApiClient();
                 mMap.setMyLocationEnabled(false);
             }
-        } else {
-            //problem!
         }
+        ActivityCompat.requestPermissions(MapsActivity.this,
+                new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_COARSE_LOCATION}, MY_PERMISSION_CODE);
+        buildGoogleApiClient();
+        mGoogleApiClient.connect();
+        mMap.setMyLocationEnabled(false);
 
 
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
@@ -141,7 +147,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API).build();
-        mGoogleApiClient.connect();
+        System.out.println("#############");
     }
 
     @Override
