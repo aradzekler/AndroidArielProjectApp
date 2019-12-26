@@ -31,7 +31,7 @@ public class RegisterNewRentDataObject {
 
 
     public RegisterNewRentDataObject(int tool, int price, double latitude, double longitude,
-                                     String notes, String imagePath, String userID, String userPhone) {
+                                     String userPhone, String imagePath, String userID) {
         this.tool = tool;
         this.price = price;
         this.latitude = latitude;
@@ -108,9 +108,9 @@ public class RegisterNewRentDataObject {
 
     public void setUserID() { this.userID = userID; }
 
-    public String getuserPhone() {
+    public String getUserPhone() {
         return this.userPhone;
     }
 
-    public void setuserPhone() { this.userPhone = userPhone; }
+    public void setUserPhone() { this.userPhone = userPhone; }
 }

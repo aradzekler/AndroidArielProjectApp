@@ -65,9 +65,8 @@ public class NewRentalActivity extends AppCompatActivity {
 
         Button selectImage = (Button) findViewById(R.id.add_img_btn);
         Button registerVe = (Button) findViewById(R.id.reg_btn);
-        final EditText notesText = (EditText) findViewById(R.id.notes_text_input);
+        final EditText phoneText = (EditText) findViewById(R.id.phone_text_input);
         final EditText priceText = (EditText) findViewById(R.id.price_text_input);
-        final RadioGroup rg = findViewById(R.id.type_radio_group);
         final RadioButton scooterBtn = (RadioButton) findViewById(R.id.scooter_radio_btn);
         final RadioButton biBtn = (RadioButton) findViewById(R.id.bicycle_radio_btn);
         final DatabaseReference mDatabase;
@@ -94,7 +93,7 @@ public class NewRentalActivity extends AppCompatActivity {
         registerVe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String notes = notesText.getText().toString();
+                String userPhone = phoneText.getText().toString();
 
                 if (!priceText.getText().toString().isEmpty()) { // if price is not an empty string.
                     price = Integer.parseInt(priceText.getText().toString());
@@ -105,7 +104,7 @@ public class NewRentalActivity extends AppCompatActivity {
                     tool = BICYCLE;
                 }
                 RegisterNewRentDataObject newRegisterObj = new RegisterNewRentDataObject(tool, price, loc[0],
-                        loc[1], notes, imagePath, userID, userPhone); // creating data object and filling with data.
+                        loc[1], userPhone, imagePath, userID); // creating data object and filling with data.
                 mDatabase.child("rents").child(newRegisterObj.getrentID()).setValue(newRegisterObj);
                 rentRegisterToast.show();
 

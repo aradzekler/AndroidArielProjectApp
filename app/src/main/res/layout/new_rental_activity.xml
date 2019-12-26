@@ -108,19 +108,19 @@
 
 
             <TextView
-                android:id="@+id/notes_textview"
+                android:id="@+id/phone_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFeatureSettings="text"
                 android:paddingRight="15dp"
-                android:text="Notes:"
+                android:text="Phone Number:"
                 android:textSize="20dp" />
 
             <EditText
-                android:id="@+id/notes_text_input"
+                android:id="@+id/phone_text_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/notes_textview"
+                android:layout_toRightOf="@+id/phone_textview"
                 android:inputType="text" />
 
         </RelativeLayout>
