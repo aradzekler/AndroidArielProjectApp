@@ -19,7 +19,7 @@ public class UserRentActivity extends AppCompatActivity {
     private final double SCOOTER = 10;
     private final double BICYCLE = 20;
     DatabaseReference mDataBase;
-    Query query;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,26 +46,26 @@ public class UserRentActivity extends AppCompatActivity {
                 else if(biCheck.isChecked()&&!scooterCheck.isChecked())
                 {
                     if (startPrice.getText().toString().isEmpty() && endPrice.getText().toString().isEmpty()) {
-                        query =FirebaseDatabase.getInstance().getReference("rents")
+                        Query query =FirebaseDatabase.getInstance().getReference("rents")
                                 .orderByChild("price").equalTo(BICYCLE);
 
                     }
                     else if (!startPrice.getText().toString().isEmpty() && endPrice.getText().toString().isEmpty())
                     {
-                        query =FirebaseDatabase.getInstance().getReference("rents")
+                        Query query =FirebaseDatabase.getInstance().getReference("rents")
                                 .orderByChild("price")
                                 .equalTo(BICYCLE)
                                 .startAt(start_Price);
                     }
                     else if(startPrice.getText().toString().isEmpty() && !endPrice.getText().toString().isEmpty())
                     {
-                        query =FirebaseDatabase.getInstance().getReference("rents")
+                        Query query =FirebaseDatabase.getInstance().getReference("rents")
                                 .orderByChild("price")
                                 .equalTo(BICYCLE)
                                 .endAt(end_Price);
                     }
                     else{
-                        query =FirebaseDatabase.getInstance().getReference("rents")
+                        Query query =FirebaseDatabase.getInstance().getReference("rents")
                                 .orderByChild("price")
                                 .equalTo(BICYCLE)
                                 .startAt(start_Price)
@@ -75,26 +75,26 @@ public class UserRentActivity extends AppCompatActivity {
                 else if(!biCheck.isChecked()&&scooterCheck.isChecked())
                 {
                     if (startPrice.getText().toString().isEmpty() && endPrice.getText().toString().isEmpty()) {
-                        query =FirebaseDatabase.getInstance().getReference("rents")
+                        Query query =FirebaseDatabase.getInstance().getReference("rents")
                                 .orderByChild("price").equalTo(SCOOTER);
 
                     }
                     else if (!startPrice.getText().toString().isEmpty() && endPrice.getText().toString().isEmpty())
                     {
-                        query =FirebaseDatabase.getInstance().getReference("rents")
+                        Query query =FirebaseDatabase.getInstance().getReference("rents")
                                 .orderByChild("price")
                                 .equalTo(SCOOTER)
                                 .startAt(start_Price);
                     }
                     else if(startPrice.getText().toString().isEmpty() && !endPrice.getText().toString().isEmpty())
                     {
-                        query =FirebaseDatabase.getInstance().getReference("rents")
+                        Query query =FirebaseDatabase.getInstance().getReference("rents")
                                 .orderByChild("price")
                                 .equalTo(SCOOTER)
                                 .endAt(end_Price);
                     }
                     else{
-                        query =FirebaseDatabase.getInstance().getReference("rents")
+                        Query query =FirebaseDatabase.getInstance().getReference("rents")
                                 .orderByChild("price")
                                 .startAt(start_Price)
                                 .endAt(end_Price);
@@ -102,24 +102,24 @@ public class UserRentActivity extends AppCompatActivity {
                 }
                 else{           //choose all vehicles
                     if (startPrice.getText().toString().isEmpty() && endPrice.getText().toString().isEmpty()) {
-                        query =FirebaseDatabase.getInstance().getReference("rents")
+                        Query query =FirebaseDatabase.getInstance().getReference("rents")
                                 .orderByChild("price");
 
                     }
                     else if (!startPrice.getText().toString().isEmpty() && endPrice.getText().toString().isEmpty())
                     {
-                        query =FirebaseDatabase.getInstance().getReference("rents")
+                        Query query =FirebaseDatabase.getInstance().getReference("rents")
                                 .orderByChild("price")
                                 .startAt(start_Price);
                     }
                     else if(startPrice.getText().toString().isEmpty() && !endPrice.getText().toString().isEmpty())
                     {
-                        query =FirebaseDatabase.getInstance().getReference("rents")
+                        Query query =FirebaseDatabase.getInstance().getReference("rents")
                                 .orderByChild("price")
                                 .endAt(end_Price);
                     }
                     else{
-                        query =FirebaseDatabase.getInstance().getReference("rents")
+                        Query query =FirebaseDatabase.getInstance().getReference("rents")
                                 .orderByChild("price")
                                 .startAt(start_Price)
                                 .endAt(end_Price);
