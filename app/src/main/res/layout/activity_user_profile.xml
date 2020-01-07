@@ -94,4 +94,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/userPic" />
+
+    <Button
+        android:id="@+id/add_profile_image_button"
+        android:layout_width="159dp"
+        android:layout_height="36dp"
+        android:layout_marginStart="72dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="251dp"
+        android:layout_marginBottom="294dp"
+        android:text="Add Profile Image"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userPic"
+        app:layout_constraintVertical_bias="0.076" />
 </androidx.constraintlayout.widget.ConstraintLayout>

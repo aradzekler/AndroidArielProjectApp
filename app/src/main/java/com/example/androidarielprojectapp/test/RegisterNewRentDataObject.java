@@ -119,7 +119,7 @@ public class RegisterNewRentDataObject implements Serializable {
         return this.userID;
     }
 
-    public void setUserID() {
+    public void setUserID(String userID) {
         this.userID = userID;
     }
 
