@@ -55,6 +55,14 @@ public class RegisterNewRentDataObject implements Serializable {
         this.tool = tool;
     }
 
+    public String getToolAsString() {
+        if (tool == 10) {
+            return "Scooter";
+        } else {
+            return "Bicycle";
+        }
+    }
+
     public String getNotes() {
         return notes;
     }
@@ -87,29 +95,39 @@ public class RegisterNewRentDataObject implements Serializable {
         this.price = price;
     }
 
-    public void setLat(double lat) {
-        this.lat = lat;
+    public String getPriceAsString() {
+        return Integer.toString(price);
     }
-
-    public void setLongi(double longi) { this.longi = longi; }
 
     public Double getLat() {
         return lat;
+    }
+
+    public void setLat(double lat) {
+        this.lat = lat;
     }
 
     public Double getLongi() {
         return longi;
     }
 
+    public void setLongi(double longi) {
+        this.longi = longi;
+    }
+
     public String getUserID() {
         return this.userID;
     }
 
-    public void setUserID() { this.userID = userID; }
+    public void setUserID() {
+        this.userID = userID;
+    }
 
     public String getUserPhone() {
         return this.userPhone;
     }
 
-    public void setUserPhone() { this.userPhone = userPhone; }
+    public void setUserPhone() {
+        this.userPhone = userPhone;
+    }
 }

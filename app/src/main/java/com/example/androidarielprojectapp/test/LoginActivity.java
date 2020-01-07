@@ -25,7 +25,7 @@ public class LoginActivity extends AppCompatActivity {
 
     //declaring relevant variables
     private static String TAG;
-    EditText myEmail,myPassword;
+    EditText myEmail, myPassword;
     Button myLoginBtn;
     TextView myCreateAccountBtn;
     FirebaseAuth myAuth;
@@ -35,45 +35,45 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        TAG="LoginActivity";
+        TAG = "LoginActivity";
         //instantiate variables
-        myEmail=findViewById(R.id.email);
-        myPassword=findViewById(R.id.password);
+        myEmail = findViewById(R.id.email);
+        myPassword = findViewById(R.id.password);
         myPassword.setTransformationMethod(new AsteriskPasswordTransformationMethod());
-        myCreateAccountBtn=findViewById(R.id.create_account);
-        myLoginBtn=findViewById(R.id.login_button);
-        myAuth=FirebaseAuth.getInstance();
-        myProgressBar=findViewById(R.id.progressBar);
+        myCreateAccountBtn = findViewById(R.id.create_account);
+        myLoginBtn = findViewById(R.id.login_button);
+        myAuth = FirebaseAuth.getInstance();
+        myProgressBar = findViewById(R.id.progressBar);
 
         //if the user is already login, we adress him to the main activity.
-        if(myAuth.getCurrentUser()!=null){
-            startActivity(new Intent(getApplicationContext(),MainActivity.class));
+        if (myAuth.getCurrentUser() != null) {
+            startActivity(new Intent(getApplicationContext(), MainActivity.class));
             finish();
         }
         //defining statements to be performed after user pressed on the login button
         myLoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email,password;
+                String email, password;
 
-                email=myEmail.getText().toString().trim();
-                password=myPassword.getText().toString().trim();
+                email = myEmail.getText().toString().trim();
+                password = myPassword.getText().toString().trim();
 
 
                 //if the user entered empty email adress , an error will appear.
-                if(TextUtils.isEmpty(email)){
+                if (TextUtils.isEmpty(email)) {
                     Toast.makeText(LoginActivity.this, "email is required!", Toast.LENGTH_LONG).show();
                     myEmail.setError("email is required!");
                     return;
                 }
                 //if the user entered empty password , an error will appear.
-                if(TextUtils.isEmpty(password)){
+                if (TextUtils.isEmpty(password)) {
                     Toast.makeText(LoginActivity.this, "password is required!", Toast.LENGTH_LONG).show();
                     myPassword.setError("password is required!");
                     return;
                 }
                 //if the user entered password containing less than 6 characters , an error will appear.
-                if(password.length()<6){
+                if (password.length() < 6) {
                     Toast.makeText(LoginActivity.this, "password most be at least 6 characters!", Toast.LENGTH_LONG).show();
                     myPassword.setError("password most be at least 6 characters!");
                     return;
@@ -90,7 +90,7 @@ public class LoginActivity extends AppCompatActivity {
                                     // Sign in success, update UI with the signed-in user's information
                                     Toast.makeText(LoginActivity.this, "User logged in succesfuly!", Toast.LENGTH_LONG).show();
                                     Log.d(TAG, "createUserWithEmail:success");
-                                    startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
                                 } else {
                                     // If sign in fails, display a message to the user.
                                     Toast.makeText(LoginActivity.this, "User login failed!" + task.getException().getMessage(), Toast.LENGTH_LONG).show();
@@ -112,9 +112,8 @@ public class LoginActivity extends AppCompatActivity {
         });
 
 
-
-
     }
+
     public class AsteriskPasswordTransformationMethod extends PasswordTransformationMethod {
         @Override
         public CharSequence getTransformation(CharSequence source, View view) {
@@ -123,18 +122,24 @@ public class LoginActivity extends AppCompatActivity {
 
         private class PasswordCharSequence implements CharSequence {
             private CharSequence mSource;
+
             public PasswordCharSequence(CharSequence source) {
                 mSource = source; // Store char sequence
             }
+
             public char charAt(int index) {
                 return '*'; // This is the important part
             }
+
             public int length() {
                 return mSource.length(); // Return default
             }
+
             public CharSequence subSequence(int start, int end) {
                 return mSource.subSequence(start, end); // Return default
             }
         }
-    };
+    }
+
+    ;
 }
