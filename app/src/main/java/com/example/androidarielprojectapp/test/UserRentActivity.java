@@ -42,7 +42,7 @@ public class UserRentActivity extends AppCompatActivity {
         final EditText startPrice = (EditText) findViewById(R.id.StartPrice);
         final EditText endPrice = (EditText) findViewById(R.id.EndPrice);
         final Toast check_Box_Error = Toast.makeText(this, "you have to check al least 1 vehicle.", Toast.LENGTH_LONG);
-        mDataBase= FirebaseDatabase.getInstance().getReference("rents");
+        mDataBase = FirebaseDatabase.getInstance().getReference("rents");
 
         //TODO: all those if statements are a mess
         Search.setOnClickListener(new View.OnClickListener() {
@@ -57,87 +57,66 @@ public class UserRentActivity extends AppCompatActivity {
                     endPriceDouble = Double.parseDouble(endPrice.getText().toString());
                 }
 
-                if(!biCheck.isChecked()&&!scooterCheck.isChecked())
-                {
+                if (!biCheck.isChecked() && !scooterCheck.isChecked()) {
                     check_Box_Error.show();
-                }
-                else if(biCheck.isChecked()&&!scooterCheck.isChecked())
-                {
+                } else if (biCheck.isChecked() && !scooterCheck.isChecked()) {
                     if (startPrice.getText().toString().isEmpty() && endPrice.getText().toString().isEmpty()) {
-                        query =FirebaseDatabase.getInstance().getReference("rents")
+                        query = FirebaseDatabase.getInstance().getReference("rents")
                                 .orderByChild("price").equalTo(BICYCLE);
 
-                    }
-                    else if (!startPrice.getText().toString().isEmpty() && endPrice.getText().toString().isEmpty())
-                    {
-                        query =FirebaseDatabase.getInstance().getReference("rents")
+                    } else if (!startPrice.getText().toString().isEmpty() && endPrice.getText().toString().isEmpty()) {
+                        query = FirebaseDatabase.getInstance().getReference("rents")
                                 .orderByChild("price")
                                 .equalTo(BICYCLE)
                                 .startAt(startPriceDouble);
-                    }
-                    else if(startPrice.getText().toString().isEmpty() && !endPrice.getText().toString().isEmpty())
-                    {
-                        query =FirebaseDatabase.getInstance().getReference("rents")
+                    } else if (startPrice.getText().toString().isEmpty() && !endPrice.getText().toString().isEmpty()) {
+                        query = FirebaseDatabase.getInstance().getReference("rents")
                                 .orderByChild("price")
                                 .equalTo(BICYCLE)
                                 .endAt(endPriceDouble);
-                    }
-                    else{
-                        query =FirebaseDatabase.getInstance().getReference("rents")
+                    } else {
+                        query = FirebaseDatabase.getInstance().getReference("rents")
                                 .orderByChild("price")
                                 .equalTo(BICYCLE)
                                 .startAt(startPriceDouble)
                                 .endAt(endPriceDouble);
                     }
-                }
-                else if(!biCheck.isChecked()&&scooterCheck.isChecked())
-                {
+                } else if (!biCheck.isChecked() && scooterCheck.isChecked()) {
                     if (startPrice.getText().toString().isEmpty() && endPrice.getText().toString().isEmpty()) {
-                        query =FirebaseDatabase.getInstance().getReference("rents")
+                        query = FirebaseDatabase.getInstance().getReference("rents")
                                 .orderByChild("price").equalTo(SCOOTER);
 
-                    }
-                    else if (!startPrice.getText().toString().isEmpty() && endPrice.getText().toString().isEmpty())
-                    {
-                        query =FirebaseDatabase.getInstance().getReference("rents")
+                    } else if (!startPrice.getText().toString().isEmpty() && endPrice.getText().toString().isEmpty()) {
+                        query = FirebaseDatabase.getInstance().getReference("rents")
                                 .orderByChild("price")
                                 .equalTo(SCOOTER)
                                 .startAt(startPriceDouble);
-                    }
-                    else if(startPrice.getText().toString().isEmpty() && !endPrice.getText().toString().isEmpty())
-                    {
-                        query =FirebaseDatabase.getInstance().getReference("rents")
+                    } else if (startPrice.getText().toString().isEmpty() && !endPrice.getText().toString().isEmpty()) {
+                        query = FirebaseDatabase.getInstance().getReference("rents")
                                 .orderByChild("price")
                                 .equalTo(SCOOTER)
                                 .endAt(endPriceDouble);
-                    }
-                    else{
-                        query =FirebaseDatabase.getInstance().getReference("rents")
+                    } else {
+                        query = FirebaseDatabase.getInstance().getReference("rents")
                                 .orderByChild("price")
                                 .startAt(startPriceDouble)
                                 .endAt(endPriceDouble);
                     }
-                }
-                else{           //choose all vehicles
+                } else {           //choose all vehicles
                     if (startPrice.getText().toString().isEmpty() && endPrice.getText().toString().isEmpty()) {
-                        query =FirebaseDatabase.getInstance().getReference("rents")
+                        query = FirebaseDatabase.getInstance().getReference("rents")
                                 .orderByChild("price");
 
-                    }
-                    else if (!startPrice.getText().toString().isEmpty() && endPrice.getText().toString().isEmpty())
-                    {
-                        query =FirebaseDatabase.getInstance().getReference("rents")
+                    } else if (!startPrice.getText().toString().isEmpty() && endPrice.getText().toString().isEmpty()) {
+                        query = FirebaseDatabase.getInstance().getReference("rents")
                                 .orderByChild("price")
                                 .startAt(startPriceDouble);
-                    }
-                    else if(startPrice.getText().toString().isEmpty() && !endPrice.getText().toString().isEmpty())
-                    {
-                        query =FirebaseDatabase.getInstance().getReference("rents")
+                    } else if (startPrice.getText().toString().isEmpty() && !endPrice.getText().toString().isEmpty()) {
+                        query = FirebaseDatabase.getInstance().getReference("rents")
                                 .orderByChild("price")
                                 .endAt(endPriceDouble);
-                    }
-                    else{
-                        query =FirebaseDatabase.getInstance().getReference("rents")
+                    } else {
+                        query = FirebaseDatabase.getInstance().getReference("rents")
                                 .orderByChild("price")
                                 .startAt(startPriceDouble)
                                 .endAt(endPriceDouble);
@@ -159,6 +138,7 @@ public class UserRentActivity extends AppCompatActivity {
                             i.putExtra("QUERY_USERS", userObjectQueryList);
                             startActivity(i);
                         }
+
                         @Override
                         public void onCancelled(DatabaseError databaseError) {
                             Log.e(TAG, "onCancelled", databaseError.toException());

@@ -2,4 +2,10 @@
     <string name="app_name">AndroidArielProjectApp</string>
     <string name="Search">Search</string>
     <string name="logout">Logout</string>
+    <string name="dialog_accept">Place Rent</string>
+    <string name="dialog_cancel">Cancel</string>
+    <string name="dialog_rent">Place a new rent?</string>
+    <string name="dialog_rent_now">Rent!</string>
+    <string name="dialog_rent_title">Rent at this location?</string>
+    <string name="dialog_rent_msg">A confirmation will be sent to the owner.</string>
 </resources>

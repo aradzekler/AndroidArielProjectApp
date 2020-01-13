@@ -6,7 +6,9 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.androidarielprojectapp.R;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -47,8 +49,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                    Intent i = new Intent(getApplicationContext(), LoginActivity.class);
-                    startActivity(i);
+                Intent i = new Intent(getApplicationContext(), LoginActivity.class);
+                startActivity(i);
             }
         });
 
@@ -71,15 +73,15 @@ public class MainActivity extends AppCompatActivity {
                 if (regStatus) {
                     Intent i = new Intent(getApplicationContext(), MapsActivity.class);
                     startActivity(i);
-                }
-                else {
+                } else {
                     Toast.makeText(MainActivity.this, "RegisterActivity in order to rent.", Toast.LENGTH_LONG).show();
                 }
             }
         });
 
     }
-    public void myProfile(View view){
+
+    public void myProfile(View view) {
         startActivity(new Intent(getApplicationContext(), UserProfileActivity.class));
     }
 
