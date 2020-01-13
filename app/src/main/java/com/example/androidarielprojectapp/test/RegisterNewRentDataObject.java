@@ -8,90 +8,89 @@ import java.util.UUID;
  */
 public class RegisterNewRentDataObject implements Serializable {
 
-    private int tool;
+    //private int tool;
+    private String ownerID;
     private int price = 0;
     private double lat;
     private double longi;
-    private String rentID;
+    private String renterID;
     private String notes;
     private String imagePath;
-    private String userID;
     private String userPhone;
-
+    UUID uuid;
+    //uuid.toString().replace("-", "");
 
     public RegisterNewRentDataObject() {
+        ownerID="";
         imagePath = null; // local storage of image
         price = 0;
         notes = null;
-        tool = 0;
         lat = 0;
         longi = 0;
-        UUID uuid = UUID.randomUUID();
-        rentID = uuid.toString().replace("-", "");
+        uuid = UUID.randomUUID();
+        renterID = "";
     }
 
 
-    public RegisterNewRentDataObject(int tool, int price, double lat, double longi,
+    public RegisterNewRentDataObject(String OwnerID, int price, double lat, double longi,
                                      String userPhone, String imagePath, String userID) {
-        this.tool = tool;
+        //this.tool = tool;int tool,
+        this.ownerID=OwnerID;
         this.price = price;
         this.lat = lat;
         this.longi = longi;
         this.notes = notes;
         this.imagePath = imagePath;
-        UUID uuid = UUID.randomUUID();
-        rentID = uuid.toString().replace("-", "");
-        this.userID = userID;
+        uuid = UUID.randomUUID();
+        renterID = "";
         this.userPhone = userPhone;
 
 
     }
 
-    public int getTool() {
-        return tool;
-    }
-
-    public void setTool(int tool) {
-        this.tool = tool;
-    }
-
-    public String getNotes() {
+    public String getnotes() {
         return notes;
     }
 
-    public void setNotes(String notes) {
+    public String getOwnerID() {
+        return ownerID;
+    }
+
+    public void setOwnerID() {
+        this.ownerID= ownerID;
+    }
+
+    public void setnotes(String notes) {
         this.notes = notes;
     }
 
-    public String getrentID() {
-        return rentID;
+    public String getrenterID() { return renterID; }
+
+    public void setrenterID(String rentID) {
+        this.renterID = rentID;
     }
 
-    public void setRentID(String rentID) {
-        this.rentID = rentID;
-    }
-
-    public String getImagePath() {
+    public String getimagePath() {
         return imagePath;
     }
 
-    public void setImagePath(String path) {
+    public void setimagePath(String path) {
         this.imagePath = path;
     }
 
-    public int getPrice() {
+    public int getprice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setprice(int price) {
         this.price = price;
     }
 
-    public void setLat(double lat) {
+    public void setlat(double lat) {
         this.lat = lat;
     }
 
-    public void setLongi(double longi) { this.longi = longi; }
+    public void setlongi(double longi) { this.longi = longi; }
 
     public Double getLat() {
         return lat;
@@ -101,15 +100,11 @@ public class RegisterNewRentDataObject implements Serializable {
         return longi;
     }
 
-    public String getUserID() {
-        return this.userID;
-    }
+    protected String getuuid(){return uuid.toString();}
 
-    public void setUserID() { this.userID = userID; }
-
-    public String getUserPhone() {
+    public String getuserPhone() {
         return this.userPhone;
     }
 
-    public void setUserPhone() { this.userPhone = userPhone; }
+    public void setuserPhone() { this.userPhone = userPhone; }
 }
