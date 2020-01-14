@@ -1,5 +1,6 @@
 package com.example.androidarielprojectapp.test;
 
+import android.app.Notification;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,6 +21,10 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+
+import static com.example.androidarielprojectapp.test.NotificationActivity.CHANNEL_1_ID;
 
 public class UserRentActivity extends AppCompatActivity {
     private final double SCOOTER = 10;
@@ -27,8 +32,8 @@ public class UserRentActivity extends AppCompatActivity {
     private final double MINIMUM_PRICE = 0;
     private final double MAXIMUM_PRICE = 999;
     private final String TAG = "UserRentActivity";
+    private NotificationManagerCompat notificationManager;
     DatabaseReference mDataBase;
-    Query query;
     RegisterNewRentDataObject userObject;
     ArrayList<RegisterNewRentDataObject> userObjectQueryList = new ArrayList<>();
 
@@ -43,12 +48,15 @@ public class UserRentActivity extends AppCompatActivity {
         final EditText endPrice = (EditText) findViewById(R.id.EndPrice);
         final Toast check_Box_Error = Toast.makeText(this, "you have to check al least 1 vehicle.", Toast.LENGTH_LONG);
         mDataBase= FirebaseDatabase.getInstance().getReference("rents");
+        notificationManager=NotificationManagerCompat.from(this);
+
 
         //TODO: all those if statements are a mess
         //queries are fixed + cleaned up unneeded if statements
         Search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Query query=null;
                 userObjectQueryList.clear();
                 if(!biCheck.isChecked()&&!scooterCheck.isChecked())
                 {
@@ -65,6 +73,7 @@ public class UserRentActivity extends AppCompatActivity {
                 else{                                                      //choose all vehicles
                         query =mDataBase.orderByChild("price");
                 }
+                sendOnChannel1(query);
                 // getting query to next map activity.
                 try {
                     query.addValueEventListener(new ValueEventListener() {
@@ -102,6 +111,20 @@ public class UserRentActivity extends AppCompatActivity {
                 }
             }
         });
+
+    }
+    public void sendOnChannel1(Query query){
+        String title="Rent Detailes";
+        String message=query!=null?message=query.toString():"there is no matching veihncle";
+            Notification notification = new NotificationCompat.Builder(this, CHANNEL_1_ID)
+                    .setSmallIcon(R.drawable.ic_one)
+                    .setContentTitle(title)
+                    .setContentText(message)
+                    .setPriority(NotificationCompat.PRIORITY_HIGH)
+                    .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                    .build();
+
+            notificationManager.notify(1, notification);
 
     }
 
