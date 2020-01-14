@@ -47,6 +47,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     Button newRentalActivityButton;
     ArrayList<Marker> markersToClear = new ArrayList<Marker>(); // arraylist for clearing markers from the map
     private GoogleMap mMap;
+    private Marker rMapMarker;
     private FusedLocationProviderClient fusedLocationClient;
     private int MY_PERMISSION_CODE = 666;
 
@@ -112,6 +113,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                 // Animating to the touched position
                 mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+                rMapMarker = mapMarker;
 
 
             }
@@ -126,7 +128,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 // TODO Auto-generated method stub
                 Intent i = new Intent(getApplicationContext(), NewRentalActivity.class);
                 try {
-                    double[] coor = {mCurrLocationMarker.getPosition().latitude, mCurrLocationMarker.getPosition().longitude};
+                    double[] coor = {rMapMarker.getPosition().latitude, rMapMarker.getPosition().longitude};
                     i.putExtra("RENTAL_LOCATION", coor);
                 } catch (NullPointerException npe) {
                     npe.printStackTrace();

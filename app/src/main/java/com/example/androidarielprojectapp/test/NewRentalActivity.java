@@ -14,7 +14,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -36,6 +35,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.iceteck.silicompressorr.SiliCompressor;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -114,19 +114,33 @@ public class NewRentalActivity extends AppCompatActivity {
                             case DialogInterface.BUTTON_POSITIVE:
                                 String userPhone = phoneText.getText().toString();
 
-                if (!priceText.getText().toString().isEmpty()) { // if price is not an empty string.
-                    price = Integer.parseInt(priceText.getText().toString());
-                }
-                if  (scooterBtn.isChecked()) {
-                    tool = SCOOTER;
-                } else if (biBtn.isChecked()) {
-                    tool = BICYCLE;
-                }
-                RegisterNewRentDataObject newRegisterObj = new RegisterNewRentDataObject(tool,userID, price, loc[0],
-                        loc[1], userPhone, imagePath); // creating data object and filling with data.
-                mDatabase.child("rents").child(newRegisterObj.getUserID()).setValue(newRegisterObj);
-                rentRegisterToast.show();
-                finish();
+                                if (!priceText.getText().toString().isEmpty()) { // if price is not an empty string.
+                                    price = Integer.parseInt(priceText.getText().toString());
+                                }
+                                if (scooterBtn.isChecked()) {
+                                    tool = SCOOTER;
+                                } else if (biBtn.isChecked()) {
+                                    tool = BICYCLE;
+                                }
+                                RegisterNewRentDataObject newRegisterObj = new RegisterNewRentDataObject(tool, price, loc[0],
+                                        loc[1], userPhone, imagePath, userID); // creating data object and filling with data.
+                                mDatabase.child("rents").child(newRegisterObj.getrentID()).setValue(newRegisterObj);
+                                uploadImage(newRegisterObj);
+                                rentRegisterToast.show();
+                                break;
+
+                            case DialogInterface.BUTTON_NEGATIVE:
+                                // User clicked the No button
+                                break;
+                        }
+                    }
+                };
+                // Set the alert dialog yes button click listener
+                builder.setPositiveButton(R.string.dialog_accept, dialogClickListener);
+                builder.setNegativeButton(R.string.dialog_cancel, dialogClickListener);
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
 
                 // in order to read to data
                 ValueEventListener postListener = new ValueEventListener() {
@@ -170,7 +184,7 @@ public class NewRentalActivity extends AppCompatActivity {
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            progressDialog.dismiss();
+                            progressDialog.dismiss(); // we are using cloud functions (Resize Images) to resize to 150x150
                             Toast.makeText(NewRentalActivity.this, "Uploaded", Toast.LENGTH_SHORT).show();
                         }
                     })

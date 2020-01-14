@@ -33,6 +33,7 @@
         <activity android:name=".test.NewRentalActivity" />
         <activity android:name=".test.RegisterActivity" />
         <activity android:name=".test.MainActivity" />
+        <activity android:name=".ImageDialog" android:theme="@style/myDialogTheme" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

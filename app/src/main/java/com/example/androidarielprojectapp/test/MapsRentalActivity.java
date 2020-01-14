@@ -1,14 +1,20 @@
 package com.example.androidarielprojectapp.test;
 
 import android.Manifest;
+import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import androidx.appcompat.app.AlertDialog;
@@ -50,6 +56,7 @@ public class MapsRentalActivity extends FragmentActivity implements OnMapReadyCa
     LocationRequest mLocationRequest;
     private GoogleMap mMap;
     private int MY_PERMISSION_CODE = 666;
+    ImageView image;
 
 
     @Override
@@ -89,7 +96,7 @@ public class MapsRentalActivity extends FragmentActivity implements OnMapReadyCa
             if (object != null) {
                 MarkerOptions markerOptions = new MarkerOptions();
                 LatLng latLng = new LatLng(object.getLat(), object.getLongi());
-                markerOptions.position(latLng).title(object.getNotes())
+                markerOptions.position(latLng).title(object.getPhone())
                         .icon(BitmapDescriptorFactory.fromResource(R.drawable.map_icon_2))
                         .draggable(false)
                         .anchor(0.5f, 0.5f);
@@ -104,26 +111,28 @@ public class MapsRentalActivity extends FragmentActivity implements OnMapReadyCa
                 AlertDialog.Builder builder = new AlertDialog.Builder(MapsRentalActivity.this);
                 builder.setTitle(R.string.dialog_rent_title);
                 builder.setMessage(R.string.dialog_rent_msg);
+
                 for (RegisterNewRentDataObject object : mapObjectsList) {
                     if (object != null && object.getLat() == marker.getPosition().latitude &&
                             object.getLongi() == marker.getPosition().longitude) {
-                        builder.setMessage("ID: " + object.getrentID()
+                        builder.setMessage("Phone: " + object.getPhone()
                                 + "\n" + "Price: " + object.getPriceAsString()
                                 + "\n" + object.getToolAsString());
-                        StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(object.getrentID());
-                        ImageView image = (ImageView) findViewById(R.id.image);
-                        Drawable myDrawable = getResources().getDrawable(R.drawable.tool_image);
-                        //image.setImageDrawable(myDrawable);
+                        StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("images/" + object.getrentID() + "_150x150");
+                        ImageView imageView = new ImageView(MapsRentalActivity.this);
+                        LayoutInflater factory = LayoutInflater.from(MapsRentalActivity.this);
+                        ImageView image = (ImageView) factory.inflate(R.layout.singleimage, null);
                         // Load the image using Glide
                         try {
-                            Glide.with(MapsRentalActivity.this)
+                            GlideApp.with(MapsRentalActivity.this)
                                     .load(storageReference)
+                                    .centerCrop()
                                     .into(image);
-                            builder.setIcon(myDrawable);
+                            //builder.setIcon(image.getDrawable());
                         } catch (NullPointerException npe) {
                             npe.printStackTrace();
                         }
-
+                        builder.setView(image);
                     }
                 }
 
