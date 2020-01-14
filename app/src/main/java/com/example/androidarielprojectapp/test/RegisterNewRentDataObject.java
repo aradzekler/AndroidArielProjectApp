@@ -8,7 +8,7 @@ import java.util.UUID;
  */
 public class RegisterNewRentDataObject implements Serializable {
 
-    //private int tool;
+    private int tool;
     private String ownerID;
     private int price = 0;
     private double lat;
@@ -21,6 +21,7 @@ public class RegisterNewRentDataObject implements Serializable {
     //uuid.toString().replace("-", "");
 
     public RegisterNewRentDataObject() {
+        tool=0;
         ownerID="";
         imagePath = null; // local storage of image
         price = 0;
@@ -32,9 +33,9 @@ public class RegisterNewRentDataObject implements Serializable {
     }
 
 
-    public RegisterNewRentDataObject(String OwnerID, int price, double lat, double longi,
-                                     String userPhone, String imagePath, String userID) {
-        //this.tool = tool;int tool,
+    public RegisterNewRentDataObject(int tool,String OwnerID, int price, double lat, double longi,
+                                     String userPhone, String imagePath) {
+        this.tool = tool;
         this.ownerID=OwnerID;
         this.price = price;
         this.lat = lat;
@@ -55,6 +56,9 @@ public class RegisterNewRentDataObject implements Serializable {
     public String getOwnerID() {
         return ownerID;
     }
+
+    public int gettool() {return tool;}
+    public void settool(int tool) {this.tool=tool;}
 
     public void setOwnerID() {
         this.ownerID= ownerID;
