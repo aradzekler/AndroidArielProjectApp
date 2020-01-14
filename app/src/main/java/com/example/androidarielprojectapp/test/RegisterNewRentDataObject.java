@@ -62,11 +62,23 @@ public class RegisterNewRentDataObject implements Serializable {
         this.tool = tool;
     }
 
+    public String getToolAsString() {
+        if (tool == 10) {
+            return "Scooter";
+        } else {
+            return "Bicycle";
+        }
+    }
+
     public String getNotes() {
         return notes;
     }
     public String getOwnerID() {
         return ownerID;
+    }
+    public void setOwnerID(String ownerID)
+    {
+        this.ownerID=ownerID;
     }
 
     public void setNotes(String notes) {
