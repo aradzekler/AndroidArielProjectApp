@@ -99,10 +99,11 @@ public class NewRentalActivity extends AppCompatActivity {
                 } else if (biBtn.isChecked()) {
                     tool = BICYCLE;
                 }
-                RegisterNewRentDataObject newRegisterObj = new RegisterNewRentDataObject(tool, price, loc[0],
-                        loc[1], userPhone, imagePath, userID); // creating data object and filling with data.
-                mDatabase.child("rents").child(newRegisterObj.getrentID()).setValue(newRegisterObj);
+                RegisterNewRentDataObject newRegisterObj = new RegisterNewRentDataObject(tool,userID, price, loc[0],
+                        loc[1], userPhone, imagePath); // creating data object and filling with data.
+                mDatabase.child("rents").child(newRegisterObj.getuuid()).setValue(newRegisterObj);
                 rentRegisterToast.show();
+                finish();
 
                 // in order to read to data
                 ValueEventListener postListener = new ValueEventListener() {
