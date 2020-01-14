@@ -9,33 +9,40 @@ import java.util.UUID;
 public class RegisterNewRentDataObject implements Serializable {
 
     private int tool;
+    private String ownerID;
     private int price = 0;
     private double lat;
     private double longi;
     private String rentID;
     private String notes;
+    private String renterID;
     private String imagePath;
     private String userID;
     private String userPhone;
-
+    UUID uuid;
+    //uuid.toString().replace("-", "");
 
     public RegisterNewRentDataObject() {
+        tool=0;
+        ownerID="";
         imagePath = null; // local storage of image
         price = 0;
         notes = null;
-        tool = 0;
         lat = 0;
         longi = 0;
         UUID uuid = UUID.randomUUID();
         rentID = uuid.toString().replace("-", "");
+        renterID = "";
     }
 
 
-    public RegisterNewRentDataObject(int tool, int price, double lat, double longi,
-                                     String userPhone, String imagePath, String userID) {
+    public RegisterNewRentDataObject(int tool,String OwnerID, int price, double lat, double longi,
+                                     String userPhone, String imagePath,String userID) {
         this.tool = tool;
+        this.ownerID=OwnerID;
         this.price = price;
         this.lat = lat;
+        renterID = "";
         this.longi = longi;
         this.notes = notes;
         this.imagePath = imagePath;
@@ -65,6 +72,13 @@ public class RegisterNewRentDataObject implements Serializable {
 
     public String getNotes() {
         return notes;
+    }
+    public String getOwnerID() {
+        return ownerID;
+    }
+    public void setOwnerID(String ownerID)
+    {
+        this.ownerID=ownerID;
     }
 
     public void setNotes(String notes) {
