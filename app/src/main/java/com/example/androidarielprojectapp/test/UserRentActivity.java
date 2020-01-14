@@ -9,8 +9,6 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.example.androidarielprojectapp.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -20,6 +18,8 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class UserRentActivity extends AppCompatActivity {
     private final double SCOOTER = 10;
@@ -80,10 +80,10 @@ public class UserRentActivity extends AppCompatActivity {
                             }
                             for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
                                 userObject = singleSnapshot.getValue(RegisterNewRentDataObject.class);
-                                if(userObject.getprice()<=endPriceDouble&&userObject.getprice()>= startPriceDouble) //filter price range
+                                if(userObject.getPrice()<=endPriceDouble&&userObject.getPrice()>= startPriceDouble) //filter price range
                                 {
                                     userObjectQueryList.add(userObject);
-                                    System.out.println(userObject.getuserPhone());
+                                    System.out.println(userObject.getUserPhone());
                                 }
 
                             }
