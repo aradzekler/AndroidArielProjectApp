@@ -1,5 +1,7 @@
 package com.example.androidarielprojectapp.test;
 
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -15,10 +17,14 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.androidarielprojectapp.R;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -26,7 +32,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -43,13 +52,16 @@ public class NewRentalActivity extends AppCompatActivity {
     private final int PICK_IMAGE_REQUEST = 1;
     private final int SCOOTER = 10;
     private final int BICYCLE = 20;
-    private String imagePath = "";
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
+    FirebaseStorage storage;
+    StorageReference storageReference;
     String userID;
     String userPhone;
     int tool = 0; // storing vehicle id.
     int price = 0;
+    private String imagePath = "";
+    private Uri filePath;
 
 
     //TODO: image server for handling images.
@@ -72,6 +84,8 @@ public class NewRentalActivity extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         fAuth = FirebaseAuth.getInstance();
         fStore = FirebaseFirestore.getInstance();
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReference();
         //DocumentReference documentReference = fStore.collection("users").document(userID);
         userID = fAuth.getCurrentUser().getUid();
         userPhone = fAuth.getCurrentUser().getPhoneNumber();
@@ -89,7 +103,16 @@ public class NewRentalActivity extends AppCompatActivity {
         registerVe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String userPhone = phoneText.getText().toString();
+                AlertDialog.Builder builder = new AlertDialog.Builder(NewRentalActivity.this);
+                builder.setMessage(R.string.dialog_rent);
+
+                // Set click listener for alert dialog buttons
+                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case DialogInterface.BUTTON_POSITIVE:
+                                String userPhone = phoneText.getText().toString();
 
                 if (!priceText.getText().toString().isEmpty()) { // if price is not an empty string.
                     price = Integer.parseInt(priceText.getText().toString());
@@ -101,7 +124,7 @@ public class NewRentalActivity extends AppCompatActivity {
                 }
                 RegisterNewRentDataObject newRegisterObj = new RegisterNewRentDataObject(tool,userID, price, loc[0],
                         loc[1], userPhone, imagePath); // creating data object and filling with data.
-                mDatabase.child("rents").child(newRegisterObj.getuuid()).setValue(newRegisterObj);
+                mDatabase.child("rents").child(newRegisterObj.getUserID()).setValue(newRegisterObj);
                 rentRegisterToast.show();
                 finish();
 
@@ -113,6 +136,7 @@ public class NewRentalActivity extends AppCompatActivity {
                         RegisterNewRentDataObject user = dataSnapshot.getValue(RegisterNewRentDataObject.class);
                         // not working yet.
                     }
+
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
                         // Getting Post failed, log a message
@@ -128,11 +152,44 @@ public class NewRentalActivity extends AppCompatActivity {
     }
 
     // intent for choosing an image, launching onActivityResult.
-    public void chooseImage() {
+    private void chooseImage() {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+    }
+
+    private void uploadImage(RegisterNewRentDataObject object) {
+        if (filePath != null) {
+            final ProgressDialog progressDialog = new ProgressDialog(this);
+            progressDialog.setTitle("Uploading...");
+            progressDialog.show();
+
+            StorageReference ref = storageReference.child("images/" + object.getrentID());
+            ref.putFile(filePath)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            progressDialog.dismiss();
+                            Toast.makeText(NewRentalActivity.this, "Uploaded", Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            progressDialog.dismiss();
+                            Toast.makeText(NewRentalActivity.this, "Failed " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                            double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot
+                                    .getTotalByteCount());
+                            progressDialog.setMessage("Uploaded " + (int) progress + "%");
+                        }
+                    });
+        }
     }
 
     // activity for getting image from gallery
@@ -141,11 +198,9 @@ public class NewRentalActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
-
-            Uri uri = data.getData();
-
+            filePath = data.getData();
             try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
                 ImageView imageView = findViewById(R.id.imgView);
                 imageView.setImageBitmap(bitmap);
                 saveImage(bitmap);

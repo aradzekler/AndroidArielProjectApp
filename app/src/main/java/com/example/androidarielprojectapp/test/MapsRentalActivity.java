@@ -1,18 +1,22 @@
 package com.example.androidarielprojectapp.test;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.WindowManager;
-import android.widget.Button;
+import android.widget.ImageView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
+import com.bumptech.glide.Glide;
 import com.example.androidarielprojectapp.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -27,6 +31,9 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
 import java.util.ArrayList;
 
 
@@ -60,8 +67,9 @@ public class MapsRentalActivity extends FragmentActivity implements OnMapReadyCa
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+
         Intent intent = getIntent();
-        ArrayList<RegisterNewRentDataObject> mapObjectsList = (ArrayList<RegisterNewRentDataObject>) intent
+        final ArrayList<RegisterNewRentDataObject> mapObjectsList = (ArrayList<RegisterNewRentDataObject>) intent
                 .getSerializableExtra("QUERY_USERS");
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
@@ -81,13 +89,68 @@ public class MapsRentalActivity extends FragmentActivity implements OnMapReadyCa
             if (object != null) {
                 MarkerOptions markerOptions = new MarkerOptions();
                 LatLng latLng = new LatLng(object.getLat(), object.getLongi());
-                markerOptions.position(latLng).title("Rent Location")
+                markerOptions.position(latLng).title(object.getNotes())
                         .icon(BitmapDescriptorFactory.fromResource(R.drawable.map_icon_2))
                         .draggable(false)
-                        .anchor(0.5f,0.5f);
-                mMap.addMarker(markerOptions);
+                        .anchor(0.5f, 0.5f);
+                mMap.addMarker(markerOptions).setTag(latLng);
+
             }
         }
+
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(MapsRentalActivity.this);
+                builder.setTitle(R.string.dialog_rent_title);
+                builder.setMessage(R.string.dialog_rent_msg);
+                for (RegisterNewRentDataObject object : mapObjectsList) {
+                    if (object != null && object.getLat() == marker.getPosition().latitude &&
+                            object.getLongi() == marker.getPosition().longitude) {
+                        builder.setMessage("ID: " + object.getrentID()
+                                + "\n" + "Price: " + object.getPriceAsString()
+                                + "\n" + object.getToolAsString());
+                        StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(object.getrentID());
+                        ImageView image = (ImageView) findViewById(R.id.image);
+                        Drawable myDrawable = getResources().getDrawable(R.drawable.tool_image);
+                        //image.setImageDrawable(myDrawable);
+                        // Load the image using Glide
+                        try {
+                            Glide.with(MapsRentalActivity.this)
+                                    .load(storageReference)
+                                    .into(image);
+                            builder.setIcon(myDrawable);
+                        } catch (NullPointerException npe) {
+                            npe.printStackTrace();
+                        }
+
+                    }
+                }
+
+                // Set click listener for alert dialog buttons
+                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case DialogInterface.BUTTON_POSITIVE:
+                                //TODO: add notifications and db removal of values.
+                                break;
+
+                            case DialogInterface.BUTTON_NEGATIVE:
+                                // User clicked the No button
+                                break;
+                        }
+                    }
+                };
+
+                // Set the alert dialog yes button click listener
+                builder.setPositiveButton(R.string.dialog_rent_now, dialogClickListener);
+                builder.setNegativeButton(R.string.dialog_cancel, dialogClickListener);
+                AlertDialog dialog = builder.create();
+                dialog.show();
+                return false;
+            }
+        });
 
     }
 
@@ -130,7 +193,7 @@ public class MapsRentalActivity extends FragmentActivity implements OnMapReadyCa
         markerOptions.position(latLng).title("You are here!")
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.map_marker_3))
                 .draggable(false)
-                .anchor(0.5f,0.5f);
+                .anchor(0.5f, 0.5f);
         try {
             mCurrLocationMarker = mMap.addMarker(markerOptions);
         } catch (NullPointerException e) {
@@ -148,7 +211,6 @@ public class MapsRentalActivity extends FragmentActivity implements OnMapReadyCa
         }
 
     }
-
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {

@@ -3,7 +3,6 @@ package com.example.androidarielprojectapp.test;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Criteria;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
@@ -30,7 +29,6 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.util.ArrayList;
 
@@ -47,11 +45,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     GoogleApiClient mGoogleApiClient;
     LocationRequest mLocationRequest;
     Button newRentalActivityButton;
+    ArrayList<Marker> markersToClear = new ArrayList<Marker>(); // arraylist for clearing markers from the map
     private GoogleMap mMap;
     private FusedLocationProviderClient fusedLocationClient;
     private int MY_PERMISSION_CODE = 666;
-
-    ArrayList<Marker> markersToClear = new ArrayList<Marker>(); // arraylist for clearing markers from the map
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,7 +99,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         .snippet("the current location of your rental")
                         .icon(BitmapDescriptorFactory.fromResource(R.drawable.map_icon_2))
                         .draggable(true)
-                        .anchor(0.5f,0.5f);
+                        .anchor(0.5f, 0.5f);
 
 
                 // Clears the previously touched position
@@ -131,8 +128,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 try {
                     double[] coor = {mCurrLocationMarker.getPosition().latitude, mCurrLocationMarker.getPosition().longitude};
                     i.putExtra("RENTAL_LOCATION", coor);
-                }
-                catch (NullPointerException npe) {
+                } catch (NullPointerException npe) {
                     npe.printStackTrace();
                 }
                 startActivity(i);
@@ -183,7 +179,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         markerOptions.position(latLng).title("You are here!")
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.map_marker_3))
                 .draggable(false)
-                .anchor(0.5f,0.5f);
+                .anchor(0.5f, 0.5f);
         try {
             mCurrLocationMarker = mMap.addMarker(markerOptions);
         } catch (NullPointerException e) {

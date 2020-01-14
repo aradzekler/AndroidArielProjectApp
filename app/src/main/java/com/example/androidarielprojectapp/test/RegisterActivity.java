@@ -31,34 +31,35 @@ import java.util.Map;
 public class RegisterActivity extends AppCompatActivity {
 
     //declaring relevant variables
-    private static String TAG="RegisterActivity";
-    EditText myFullName,myEmail,myPhoneNumber,myPassword;
+    private static String TAG = "RegisterActivity";
+    EditText myFullName, myEmail, myPhoneNumber, myPassword;
     Button myRegisterBtn;
     TextView myLoginBtn;
     FirebaseAuth mAuth;
     ProgressBar progressBar;
     FirebaseFirestore fStore;
     String userID;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
         //instantiate variables
-        myFullName=findViewById(R.id.full_name);
-        myEmail=findViewById(R.id.email);
-        myPhoneNumber=findViewById(R.id.phone_number);
-        myPassword=findViewById(R.id.password);
-        myRegisterBtn=findViewById(R.id.register_button);
-        myLoginBtn=findViewById(R.id.already_registered);
+        myFullName = findViewById(R.id.full_name);
+        myEmail = findViewById(R.id.email);
+        myPhoneNumber = findViewById(R.id.phone_number);
+        myPassword = findViewById(R.id.password);
+        myRegisterBtn = findViewById(R.id.register_button);
+        myLoginBtn = findViewById(R.id.already_registered);
         myPassword.setTransformationMethod(new AsteriskPasswordTransformationMethod());
-        mAuth=FirebaseAuth.getInstance();
-        progressBar=findViewById(R.id.progressBar);
-        fStore=FirebaseFirestore.getInstance();
+        mAuth = FirebaseAuth.getInstance();
+        progressBar = findViewById(R.id.progressBar);
+        fStore = FirebaseFirestore.getInstance();
 
         //if the user is already login, we adress him to the main activity.
-        if(mAuth.getCurrentUser()!= null){
-            startActivity(new Intent(getApplicationContext(),MainActivity.class));
+        if (mAuth.getCurrentUser() != null) {
+            startActivity(new Intent(getApplicationContext(), MainActivity.class));
             finish();
         }
         //defining statements to be performed after user pressed on the register button
@@ -66,27 +67,27 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
 
             public void onClick(View v) {
-                final String email,password,phoneNumber,fullName;
+                final String email, password, phoneNumber, fullName;
 
-                email=myEmail.getText().toString().trim();
-                password=myPassword.getText().toString().trim();
-                phoneNumber=myPhoneNumber.getText().toString();
-                fullName=myFullName.getText().toString();
+                email = myEmail.getText().toString().trim();
+                password = myPassword.getText().toString().trim();
+                phoneNumber = myPhoneNumber.getText().toString();
+                fullName = myFullName.getText().toString();
 
                 //if the user entered empty email adress , an error will appear.
-                if(TextUtils.isEmpty(email)){
+                if (TextUtils.isEmpty(email)) {
                     Toast.makeText(RegisterActivity.this, "email is required!", Toast.LENGTH_LONG).show();
                     myEmail.setError("email is required!");
                     return;
                 }
                 //if the user entered empty password , an error will appear.
-                if(TextUtils.isEmpty(password)){
+                if (TextUtils.isEmpty(password)) {
                     Toast.makeText(RegisterActivity.this, "password is required!", Toast.LENGTH_LONG).show();
                     myPassword.setError("password is required!");
                     return;
                 }
                 //if the user entered password containing less than 6 characters , an error will appear.
-                if(password.length()<6){
+                if (password.length() < 6) {
                     Toast.makeText(RegisterActivity.this, "password most be at least 6 characters!", Toast.LENGTH_LONG).show();
                     myPassword.setError("password most be at least 6 characters!");
                     return;
@@ -104,30 +105,30 @@ public class RegisterActivity extends AppCompatActivity {
                                     // Sign in success, update UI with the signed-in user's information
                                     Toast.makeText(RegisterActivity.this, "User created!", Toast.LENGTH_SHORT).show();
                                     Log.d(TAG, "createUserWithEmail:success");
-                                    userID=mAuth.getCurrentUser().getUid();
-                                    DocumentReference documernRef=fStore.collection("users").document(userID);
-                                    Map<String,Object> user=new HashMap<>();
-                                    user.put("full name",fullName);
-                                    user.put("email",email);
-                                    user.put("phone number",phoneNumber);
-                                    documernRef.set(user).addOnSuccessListener(new OnSuccessListener<Void>(){
+                                    userID = mAuth.getCurrentUser().getUid();
+                                    DocumentReference documernRef = fStore.collection("users").document(userID);
+                                    Map<String, Object> user = new HashMap<>();
+                                    user.put("full name", fullName);
+                                    user.put("email", email);
+                                    user.put("phone number", phoneNumber);
+                                    documernRef.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
 
                                         @Override
                                         public void onSuccess(Void aVoid) {
-                                            Toast.makeText(RegisterActivity.this,fullName+" user profile is created with id:"+userID, Toast.LENGTH_LONG).show();
+                                            Toast.makeText(RegisterActivity.this, fullName + " user profile is created with id:" + userID, Toast.LENGTH_LONG).show();
                                         }
                                     }).addOnFailureListener(new OnFailureListener() {
                                         @Override
                                         public void onFailure(@NonNull Exception e) {
-                                            Toast.makeText(RegisterActivity.this, "Error "+e.getMessage(), Toast.LENGTH_LONG).show();
+                                            Toast.makeText(RegisterActivity.this, "Error " + e.getMessage(), Toast.LENGTH_LONG).show();
                                         }
                                     });
-                                    Toast.makeText(RegisterActivity.this, fullName+" Welcome to EasyRent!", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(RegisterActivity.this, fullName + " Welcome to EasyRent!", Toast.LENGTH_SHORT).show();
                                     finish();
                                 } else {
                                     // If sign in fails, display a message to the user.
-                                    Toast.makeText(RegisterActivity.this, "User creation failed!"+task.getException().getMessage(), Toast.LENGTH_LONG).show();
-                                    Log.w(TAG, "createUserWithEmail:failure"+task.getException().getMessage(), task.getException());
+                                    Toast.makeText(RegisterActivity.this, "User creation failed!" + task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                                    Log.w(TAG, "createUserWithEmail:failure" + task.getException().getMessage(), task.getException());
                                     progressBar.setVisibility(View.GONE);
                                 }
                             }
@@ -147,6 +148,7 @@ public class RegisterActivity extends AppCompatActivity {
 
 
     }
+
     //methods that enable the password key more hidden and secure.
     public class AsteriskPasswordTransformationMethod extends PasswordTransformationMethod {
         @Override
@@ -156,19 +158,25 @@ public class RegisterActivity extends AppCompatActivity {
 
         private class PasswordCharSequence implements CharSequence {
             private CharSequence mSource;
+
             public PasswordCharSequence(CharSequence source) {
                 mSource = source; // Store char sequence
             }
+
             public char charAt(int index) {
                 return '*'; // This is the important part
             }
+
             public int length() {
                 return mSource.length(); // Return default
             }
+
             public CharSequence subSequence(int start, int end) {
                 return mSource.subSequence(start, end); // Return default
             }
         }
-    };
+    }
+
+    ;
 
 }

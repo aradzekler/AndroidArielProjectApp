@@ -13,9 +13,11 @@ public class RegisterNewRentDataObject implements Serializable {
     private int price = 0;
     private double lat;
     private double longi;
-    private String renterID;
+    private String rentID;
     private String notes;
+    private String renterID;
     private String imagePath;
+    private String userID;
     private String userPhone;
     UUID uuid;
     //uuid.toString().replace("-", "");
@@ -28,7 +30,8 @@ public class RegisterNewRentDataObject implements Serializable {
         notes = null;
         lat = 0;
         longi = 0;
-        uuid = UUID.randomUUID();
+        UUID uuid = UUID.randomUUID();
+        rentID = uuid.toString().replace("-", "");
         renterID = "";
     }
 
@@ -39,76 +42,94 @@ public class RegisterNewRentDataObject implements Serializable {
         this.ownerID=OwnerID;
         this.price = price;
         this.lat = lat;
+        renterID = "";
         this.longi = longi;
         this.notes = notes;
         this.imagePath = imagePath;
-        uuid = UUID.randomUUID();
-        renterID = "";
+        UUID uuid = UUID.randomUUID();
+        rentID = uuid.toString().replace("-", "");
+        this.userID = userID;
         this.userPhone = userPhone;
 
 
     }
 
-    public String getnotes() {
-        return notes;
+    public int getTool() {
+        return tool;
     }
 
+    public void setTool(int tool) {
+        this.tool = tool;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
     public String getOwnerID() {
         return ownerID;
     }
 
-    public int gettool() {return tool;}
-    public void settool(int tool) {this.tool=tool;}
-
-    public void setOwnerID() {
-        this.ownerID= ownerID;
-    }
-
-    public void setnotes(String notes) {
+    public void setNotes(String notes) {
         this.notes = notes;
     }
 
-    public String getrenterID() { return renterID; }
-
-    public void setrenterID(String rentID) {
-        this.renterID = rentID;
+    public String getrentID() {
+        return rentID;
     }
 
-    public String getimagePath() {
+    public void setRentID(String rentID) {
+        this.rentID = rentID;
+    }
+
+    public String getImagePath() {
         return imagePath;
     }
 
-    public void setimagePath(String path) {
+    public void setImagePath(String path) {
         this.imagePath = path;
     }
 
-    public int getprice() {
+    public int getPrice() {
         return price;
     }
 
-    public void setprice(int price) {
+    public void setPrice(int price) {
         this.price = price;
     }
 
-    public void setlat(double lat) {
-        this.lat = lat;
+    public String getPriceAsString() {
+        return Integer.toString(price);
     }
-
-    public void setlongi(double longi) { this.longi = longi; }
 
     public Double getLat() {
         return lat;
+    }
+
+    public void setLat(double lat) {
+        this.lat = lat;
     }
 
     public Double getLongi() {
         return longi;
     }
 
-    protected String getuuid(){return uuid.toString();}
+    public void setLongi(double longi) {
+        this.longi = longi;
+    }
 
-    public String getuserPhone() {
+    public String getUserID() {
+        return this.userID;
+    }
+
+    public void setUserID(String userID) {
+        this.userID = userID;
+    }
+
+    public String getUserPhone() {
         return this.userPhone;
     }
 
-    public void setuserPhone() { this.userPhone = userPhone; }
+    public void setUserPhone() {
+        this.userPhone = userPhone;
+    }
 }
