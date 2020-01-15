@@ -1,9 +1,14 @@
 package com.example.androidarielprojectapp.test;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -16,8 +21,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+
 import com.example.androidarielprojectapp.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -27,31 +31,34 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
+
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 
 import javax.annotation.Nullable;
 
 public class UserProfileActivity extends AppCompatActivity {
 
-    private final int PICK_IMAGE_REQUEST = 1;
+    private final int IMAGE_GALLERY_REQUEST=20;
+    private final int PERMISSION_REQUEST = 0;
+    private final int RESULT_LOAD_IMAGE=1;
+    ImageView userImage;
     TextView headLine, fullName, email, phoneNumber;
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
     String userID;
     Button goBack;
     Button addProfileImage;
-    FirebaseStorage storage;
-    StorageReference storageReference;
-    private Uri filePath;
-    private String imagePath = "";
+
+
+
+
+
 
     //todo: add a profile picture button and picture.
     @Override
@@ -60,6 +67,12 @@ public class UserProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
 
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED){
+            requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},PERMISSION_REQUEST);
+        }
+
+        userImage=findViewById(R.id.userPic);
         headLine = findViewById(R.id.headline);
         fullName = findViewById(R.id.userName);
         email = findViewById(R.id.userEmail);
@@ -71,8 +84,7 @@ public class UserProfileActivity extends AppCompatActivity {
         fAuth = FirebaseAuth.getInstance();
         fStore = FirebaseFirestore.getInstance();
         userID = fAuth.getCurrentUser().getUid();
-        storage = FirebaseStorage.getInstance();
-        storageReference = storage.getReference();
+        
         final RegisterNewRentDataObject user = new RegisterNewRentDataObject();
         user.setUserID(userID);
 
@@ -99,137 +111,47 @@ public class UserProfileActivity extends AppCompatActivity {
         addProfileImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                chooseImage();
-                uploadImage(user);
-                showImage(user);
+                Intent i=new Intent(Intent.ACTION_PICK,
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(i,RESULT_LOAD_IMAGE);
             }
         });
     }
 
-    private void showImage(final RegisterNewRentDataObject object) {
-        final StorageReference ref = storageReference.child("images/" + object.getrentID() + "profile");
-        ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                ref.putFile(uri)
-                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                Toast.makeText(UserProfileActivity.this, "Success!", Toast.LENGTH_SHORT).show();
-                                ImageView image = (ImageView) findViewById(R.id.userPic);
-                                // Load the image using Glide
-                                try {
-                                    Glide.with(UserProfileActivity.this)
-                                            .load(storageReference.child("images/" + object.getrentID() + "profile"))
-                                            .transition(DrawableTransitionOptions.withCrossFade())
-                                            .into(image);
-                                } catch (NullPointerException npe) {
-                                    npe.printStackTrace();
-                                }
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                            }
-                        })
-                        .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                            }
-                        });
-
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                // Handle any errors
-            }
-        });
-
-    }
-
-    private void uploadImage(RegisterNewRentDataObject object) {
-        if (filePath != null) {
-            final ProgressDialog progressDialog = new ProgressDialog(this);
-            progressDialog.setTitle("Uploading...");
-            progressDialog.show();
-
-            StorageReference ref = storageReference.child("images/" + object.getrentID() + "profile");
-            ref.putFile(filePath)
-                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            progressDialog.dismiss(); // we are using cloud functions (Resize Images) to resize to 150x150
-                            Toast.makeText(UserProfileActivity.this, "Uploaded", Toast.LENGTH_SHORT).show();
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            progressDialog.dismiss();
-                            Toast.makeText(UserProfileActivity.this, "Failed " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    })
-                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                            double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot
-                                    .getTotalByteCount());
-                            progressDialog.setMessage("Uploaded " + (int) progress + "%");
-                        }
-                    });
-        }
-    }
-
-    // intent for choosing an image, launching onActivityResult.
-    private void chooseImage() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
-    }
-
-
-    // activity for getting image from gallery
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @androidx.annotation.Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            filePath = data.getData();
-            try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
-                ImageView imageView = findViewById(R.id.userPic);
-                imageView.setImageBitmap(bitmap);
-                saveImage(bitmap);
-            } catch (IOException e) {
-                e.printStackTrace();
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode){
+            case PERMISSION_REQUEST:{
+                if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    Toast.makeText(this, "Permission granted!", Toast.LENGTH_LONG).show();
+                }else{
+                    Toast.makeText(this, "Permission not granted!", Toast.LENGTH_LONG).show();
+                    finish();
+                }
             }
         }
     }
 
-    // saving the image to data object used inside onActivityResult
-    private void saveImage(Bitmap resource) {
-        String savedImagePath = null;
-        String imageFileName = "image" + ".jpg";
-        final File storageDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() +
-                "/Pics");
 
-        File imageFile = new File(storageDir, imageFileName);
-        savedImagePath = imageFile.getAbsolutePath();
-        try {
-            OutputStream fOut = new FileOutputStream(imageFile);
-            resource.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
-            fOut.close();
-        } catch (Exception e) {
-            e.printStackTrace();
+
+    protected void onActivityResult(int requestCode, int resultCode,Intent data) {
+
+        if(resultCode== RESULT_OK){
+            if(requestCode==IMAGE_GALLERY_REQUEST){
+                Uri imageUri=data.getData();
+                InputStream inputStream;
+                try{
+                    inputStream=getContentResolver().openInputStream(imageUri);
+                    Bitmap image=BitmapFactory.decodeStream(inputStream);
+                    userImage.setImageBitmap(image);
+                }catch (FileNotFoundException e){
+                    e.printStackTrace();
+                    Toast.makeText(this, "Unable to open image", Toast.LENGTH_SHORT).show();
+                }
+            }
+            return;
         }
-
-        // Add the image path to object
-        imagePath = savedImagePath;
-        Toast.makeText(this, "Image Saved", Toast.LENGTH_LONG).show();
+        super.onActivityResult(requestCode, resultCode, data);
     }
-
 }
 
