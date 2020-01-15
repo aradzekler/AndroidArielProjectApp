@@ -17,16 +17,17 @@
         android:fontFeatureSettings="text"
         android:paddingRight="15dp"
         android:text="Type:"
-        android:textSize="20dp"
+        android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
 
     <EditText
         android:id="@+id/EndPrice"
         android:layout_width="122dp"
         android:layout_height="53dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="500dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="440dp"
         android:ems="10"
         android:inputType="number"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -36,25 +37,19 @@
         android:id="@+id/StartPrice"
         android:layout_width="122dp"
         android:layout_height="53dp"
-        android:layout_marginBottom="500dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="440dp"
         android:inputType="number"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView" />
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="196dp"
-        android:text="From Price"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toStartOf="@+id/textView2"
+        app:layout_constraintTop_toBottomOf="@+id/bicycle_check_box"
+        app:layout_constraintVertical_bias="1.0" />
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="516dp"
+        android:layout_marginBottom="460dp"
         android:text="To price"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/EndPrice" />
@@ -67,7 +62,9 @@
         android:layout_marginBottom="64dp"
         android:text="@string/Search"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
 
     <CheckBox
         android:id="@+id/scooter_check_box"
@@ -83,11 +80,20 @@
         android:id="@+id/bicycle_check_box"
         android:layout_width="111dp"
         android:layout_height="31dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="32dp"
         android:layout_marginTop="124dp"
         android:text="bicycle"
         app:layout_constraintStart_toEndOf="@+id/type_textview"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="460dp"
+        android:text="From Price"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/StartPrice" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
