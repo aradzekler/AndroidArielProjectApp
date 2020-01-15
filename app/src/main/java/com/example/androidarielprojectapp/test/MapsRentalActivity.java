@@ -1,31 +1,20 @@
 package com.example.androidarielprojectapp.test;
 
 import android.Manifest;
-import android.app.Dialog;
-import android.content.Context;
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.WindowManager;
-import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.FragmentActivity;
-
-import com.bumptech.glide.Glide;
 import com.example.androidarielprojectapp.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -40,10 +29,22 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentActivity;
+
+import static com.example.androidarielprojectapp.test.NotificationActivity.CHANNEL_1_ID;
 
 
 /**
@@ -52,7 +53,6 @@ import java.util.ArrayList;
 public class MapsRentalActivity extends FragmentActivity implements OnMapReadyCallback,
         LocationListener, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
-
     Location mLastLocation;
     Marker mCurrLocationMarker; // our current location
     GoogleApiClient mGoogleApiClient;
@@ -60,6 +60,11 @@ public class MapsRentalActivity extends FragmentActivity implements OnMapReadyCa
     private GoogleMap mMap;
     private int MY_PERMISSION_CODE = 666;
     String phoneNum = "";
+    private NotificationManager notificationManager;
+    DatabaseReference database =FirebaseDatabase.getInstance().getReference("rents");
+    String currentRent ;
+    FirebaseUser currentuser = FirebaseAuth.getInstance().getCurrentUser();
+
 
 
     @Override
@@ -77,7 +82,7 @@ public class MapsRentalActivity extends FragmentActivity implements OnMapReadyCa
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
+        final Toast rentedMsg = Toast.makeText(MapsRentalActivity.this, "sorry vehicle is rented!", Toast.LENGTH_LONG);
         Intent intent = getIntent();
         final ArrayList<RegisterNewRentDataObject> mapObjectsList = (ArrayList<RegisterNewRentDataObject>) intent
                 .getSerializableExtra("QUERY_USERS");
@@ -110,11 +115,11 @@ public class MapsRentalActivity extends FragmentActivity implements OnMapReadyCa
 
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
-            public boolean onMarkerClick(Marker marker) {
+            public boolean onMarkerClick(final Marker marker) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(MapsRentalActivity.this);
                 builder.setTitle(R.string.dialog_rent_title);
                 builder.setMessage(R.string.dialog_rent_msg);
-
+                final String currentRent;
                 for (RegisterNewRentDataObject object : mapObjectsList) {
                     if (object != null && object.getLat() == marker.getPosition().latitude &&
                             object.getLongi() == marker.getPosition().longitude) {
@@ -149,8 +154,28 @@ public class MapsRentalActivity extends FragmentActivity implements OnMapReadyCa
                                 //TODO: add notifications and db removal of values.
                                 Call(phoneNum);
                                 break;
-
                             case DialogInterface.BUTTON_NEGATIVE:
+
+                                for (RegisterNewRentDataObject object : mapObjectsList) {
+                                    if (object != null && object.getLat() == marker.getPosition().latitude &&
+                                            object.getLongi() == marker.getPosition().longitude) {
+                                        if(object.getRenterID().isEmpty()) //check if vehicle is rented
+                                        {
+                                            System.out.println(object.getrentID());
+                                            database.child(object.getrentID()).child("renterID").setValue(currentuser.getUid());
+                                            sendOnChannel1();
+                                        }
+                                        else{
+                                            rentedMsg.show();
+                                        }
+
+                                    }
+                                }
+
+                                //System.out.println(currentRent);
+
+                                break;
+                            case DialogInterface.BUTTON_NEUTRAL:
                                 // User clicked the No button
                                 break;
                         }
@@ -158,8 +183,9 @@ public class MapsRentalActivity extends FragmentActivity implements OnMapReadyCa
                 };
 
                 // Set the alert dialog yes button click listener
-                builder.setPositiveButton(R.string.dialog_call, dialogClickListener);
-                builder.setNegativeButton(R.string.dialog_cancel, dialogClickListener);
+                builder.setNegativeButton(R.string.dialog_rent_now, dialogClickListener);
+                builder.setPositiveButton(R.string.dialog_call,dialogClickListener);
+                builder.setNeutralButton(R.string.dialog_cancel, dialogClickListener);
                 AlertDialog dialog = builder.create();
                 dialog.show();
                 return false;
@@ -249,6 +275,21 @@ public class MapsRentalActivity extends FragmentActivity implements OnMapReadyCa
         }
     }
 
+
+    public void sendOnChannel1(){//
+        String title="Easy Rent";
+        String message="someone wants to rent you'r vehicle!";
+        Notification notification = new NotificationCompat.Builder(this, CHANNEL_1_ID)
+                .setSmallIcon(R.drawable.ic_one)
+                .setContentTitle(title)
+                .setContentText(message)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                .build();
+        notificationManager =(NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        notificationManager.notify(1,notification);
+
+    }
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {

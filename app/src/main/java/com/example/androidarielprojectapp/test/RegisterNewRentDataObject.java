@@ -15,6 +15,7 @@ public class RegisterNewRentDataObject implements Serializable {
     private double longi;
     private String rentID;
     private String phone;
+    private String renterID;
     private String imagePath;
     private String userID;
     private String userPhone;
@@ -31,6 +32,7 @@ public class RegisterNewRentDataObject implements Serializable {
         longi = 0;
         UUID uuid = UUID.randomUUID();
         rentID = uuid.toString().replace("-", "");
+        renterID = "";
     }
 
 
@@ -40,6 +42,7 @@ public class RegisterNewRentDataObject implements Serializable {
         this.ownerID=OwnerID;
         this.price = price;
         this.lat = lat;
+        renterID = "";
         this.longi = longi;
         this.phone = userPhone;
         this.imagePath = imagePath;
@@ -97,6 +100,12 @@ public class RegisterNewRentDataObject implements Serializable {
 
     public String getPhone() {
         return phone;
+    }
+    public String getRenterID(){
+        return renterID;
+    }
+    public void setRenterID(String renterID){
+         this.renterID=rentID;
     }
     public String getOwnerID() {
         return ownerID;
@@ -166,7 +175,7 @@ public class RegisterNewRentDataObject implements Serializable {
         return this.userPhone;
     }
 
-    public void setUserPhone() {
+    public void setUserPhone(String userPhone) {
         this.userPhone = userPhone;
     }
 }
