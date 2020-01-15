@@ -13,9 +13,17 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentActivity;
 
 import com.bumptech.glide.Glide;
 import com.example.androidarielprojectapp.R;
@@ -32,17 +40,10 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
-
-import androidx.appcompat.app.AlertDialog;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.FragmentActivity;
 
 
 /**
@@ -58,7 +59,7 @@ public class MapsRentalActivity extends FragmentActivity implements OnMapReadyCa
     LocationRequest mLocationRequest;
     private GoogleMap mMap;
     private int MY_PERMISSION_CODE = 666;
-    ImageView image;
+    String phoneNum = "";
 
 
     @Override
@@ -78,7 +79,7 @@ public class MapsRentalActivity extends FragmentActivity implements OnMapReadyCa
         mMap = googleMap;
 
         Intent intent = getIntent();
-        final  ArrayList<RegisterNewRentDataObject> mapObjectsList = (ArrayList<RegisterNewRentDataObject>) intent
+        final ArrayList<RegisterNewRentDataObject> mapObjectsList = (ArrayList<RegisterNewRentDataObject>) intent
                 .getSerializableExtra("QUERY_USERS");
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
@@ -98,7 +99,7 @@ public class MapsRentalActivity extends FragmentActivity implements OnMapReadyCa
             if (object != null) {
                 MarkerOptions markerOptions = new MarkerOptions();
                 LatLng latLng = new LatLng(object.getLat(), object.getLongi());
-                markerOptions.position(latLng).title(object.getNotes())
+                markerOptions.position(latLng).title(object.getPhone())
                         .icon(BitmapDescriptorFactory.fromResource(R.drawable.map_icon_2))
                         .draggable(false)
                         .anchor(0.5f, 0.5f);
@@ -113,26 +114,29 @@ public class MapsRentalActivity extends FragmentActivity implements OnMapReadyCa
                 AlertDialog.Builder builder = new AlertDialog.Builder(MapsRentalActivity.this);
                 builder.setTitle(R.string.dialog_rent_title);
                 builder.setMessage(R.string.dialog_rent_msg);
+
                 for (RegisterNewRentDataObject object : mapObjectsList) {
                     if (object != null && object.getLat() == marker.getPosition().latitude &&
                             object.getLongi() == marker.getPosition().longitude) {
-                        builder.setMessage("ID: " + object.getrentID()
+                        builder.setMessage("Phone: " + object.getPhone()
                                 + "\n" + "Price: " + object.getPriceAsString()
                                 + "\n" + object.getToolAsString());
-                        StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(object.getrentID());
-                        ImageView image = (ImageView) findViewById(R.id.image);
-                        Drawable myDrawable = getResources().getDrawable(R.drawable.tool_image);
-                        //image.setImageDrawable(myDrawable);
+                        StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("images/" + object.getrentID() + "_150x150");
+                        phoneNum = object.getPhone();
+                        ImageView imageView = new ImageView(MapsRentalActivity.this);
+                        LayoutInflater factory = LayoutInflater.from(MapsRentalActivity.this);
+                        ImageView image = (ImageView) factory.inflate(R.layout.singleimage, null);
                         // Load the image using Glide
                         try {
-                            Glide.with(MapsRentalActivity.this)
+                            GlideApp.with(MapsRentalActivity.this)
                                     .load(storageReference)
+                                    .centerCrop()
                                     .into(image);
-                            builder.setIcon(myDrawable);
+                            //builder.setIcon(image.getDrawable());
                         } catch (NullPointerException npe) {
                             npe.printStackTrace();
                         }
-
+                        builder.setView(image);
                     }
                 }
 
@@ -143,6 +147,7 @@ public class MapsRentalActivity extends FragmentActivity implements OnMapReadyCa
                         switch (which) {
                             case DialogInterface.BUTTON_POSITIVE:
                                 //TODO: add notifications and db removal of values.
+                                Call(phoneNum);
                                 break;
 
                             case DialogInterface.BUTTON_NEGATIVE:
@@ -153,7 +158,7 @@ public class MapsRentalActivity extends FragmentActivity implements OnMapReadyCa
                 };
 
                 // Set the alert dialog yes button click listener
-                builder.setPositiveButton(R.string.dialog_rent_now, dialogClickListener);
+                builder.setPositiveButton(R.string.dialog_call, dialogClickListener);
                 builder.setNegativeButton(R.string.dialog_cancel, dialogClickListener);
                 AlertDialog dialog = builder.create();
                 dialog.show();
@@ -220,6 +225,30 @@ public class MapsRentalActivity extends FragmentActivity implements OnMapReadyCa
         }
 
     }
+
+    public  void Call(String phone) {
+        // show() method display the toast with message
+        // "clicked"
+        Toast.makeText(this, "clicked", Toast.LENGTH_LONG)
+                .show();
+        // Use format with "tel:" and phoneNumber created is
+        // stored in u.
+        Uri u = Uri.parse("tel:" + phone);
+        // Create the intent and set the data for the
+        // intent as the phone number.
+        Intent i = new Intent(Intent.ACTION_DIAL, u);
+        try {
+            // Launch the Phone app's dialer with a phone
+            // number to dial a call.
+            startActivity(i);
+        }
+        catch (SecurityException s) {
+            // show() method display the toast with
+            // exception message.
+
+        }
+    }
+
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {

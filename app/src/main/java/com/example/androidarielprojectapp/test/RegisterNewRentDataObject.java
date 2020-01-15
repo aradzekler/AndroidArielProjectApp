@@ -41,7 +41,7 @@ public class RegisterNewRentDataObject implements Serializable {
         this.price = price;
         this.lat = lat;
         this.longi = longi;
-        this.phone = phone;
+        this.phone = userPhone;
         this.imagePath = imagePath;
         UUID uuid = UUID.randomUUID();
         rentID = uuid.toString().replace("-", "");
@@ -57,7 +57,7 @@ public class RegisterNewRentDataObject implements Serializable {
         this.price = price;
         this.lat = lat;
         this.longi = longi;
-        this.phone = phone;
+        this.phone = userPhone;
         this.imagePath = imagePath;
         UUID uuid = UUID.randomUUID();
         rentID = uuid.toString().replace("-", "");
@@ -72,7 +72,7 @@ public class RegisterNewRentDataObject implements Serializable {
         this.price = price;
         this.lat = lat;
         this.longi = longi;
-        this.phone = phone;
+        this.phone = userPhone;
         this.imagePath = imagePath;
         UUID uuid = UUID.randomUUID();
         rentID = uuid.toString().replace("-", "");
