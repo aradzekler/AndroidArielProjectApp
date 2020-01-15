@@ -7,7 +7,6 @@ import com.bumptech.glide.annotation.GlideModule;
 import com.bumptech.glide.module.AppGlideModule;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.firebase.storage.StorageReference;
-import com.example.androidarielprojectapp.test.MyAppGlideModule;
 
 import java.io.InputStream;
 

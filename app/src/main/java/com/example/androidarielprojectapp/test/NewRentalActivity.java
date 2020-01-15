@@ -16,11 +16,6 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.example.androidarielprojectapp.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -35,12 +30,16 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.iceteck.silicompressorr.SiliCompressor;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 
 /**
@@ -122,7 +121,7 @@ public class NewRentalActivity extends AppCompatActivity {
                                 } else if (biBtn.isChecked()) {
                                     tool = BICYCLE;
                                 }
-                                RegisterNewRentDataObject newRegisterObj = new RegisterNewRentDataObject(tool, price, loc[0],
+                                RegisterNewRentDataObject newRegisterObj = new RegisterNewRentDataObject(tool,userID, price, loc[0],
                                         loc[1], userPhone, imagePath, userID); // creating data object and filling with data.
                                 mDatabase.child("rents").child(newRegisterObj.getrentID()).setValue(newRegisterObj);
                                 uploadImage(newRegisterObj);
