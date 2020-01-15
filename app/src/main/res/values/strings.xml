@@ -8,4 +8,5 @@
     <string name="dialog_rent_now">Rent!</string>
     <string name="dialog_rent_title">Rent at this location?</string>
     <string name="dialog_rent_msg">A confirmation will be sent to the owner.</string>
+    <string name="dialog_call">Call!</string>
 </resources>

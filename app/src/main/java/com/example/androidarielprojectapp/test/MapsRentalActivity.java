@@ -13,9 +13,12 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
@@ -56,7 +59,7 @@ public class MapsRentalActivity extends FragmentActivity implements OnMapReadyCa
     LocationRequest mLocationRequest;
     private GoogleMap mMap;
     private int MY_PERMISSION_CODE = 666;
-    ImageView image;
+    String phoneNum = "";
 
 
     @Override
@@ -119,6 +122,7 @@ public class MapsRentalActivity extends FragmentActivity implements OnMapReadyCa
                                 + "\n" + "Price: " + object.getPriceAsString()
                                 + "\n" + object.getToolAsString());
                         StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("images/" + object.getrentID() + "_150x150");
+                        phoneNum = object.getPhone();
                         ImageView imageView = new ImageView(MapsRentalActivity.this);
                         LayoutInflater factory = LayoutInflater.from(MapsRentalActivity.this);
                         ImageView image = (ImageView) factory.inflate(R.layout.singleimage, null);
@@ -143,6 +147,7 @@ public class MapsRentalActivity extends FragmentActivity implements OnMapReadyCa
                         switch (which) {
                             case DialogInterface.BUTTON_POSITIVE:
                                 //TODO: add notifications and db removal of values.
+                                Call(phoneNum);
                                 break;
 
                             case DialogInterface.BUTTON_NEGATIVE:
@@ -153,7 +158,7 @@ public class MapsRentalActivity extends FragmentActivity implements OnMapReadyCa
                 };
 
                 // Set the alert dialog yes button click listener
-                builder.setPositiveButton(R.string.dialog_rent_now, dialogClickListener);
+                builder.setPositiveButton(R.string.dialog_call, dialogClickListener);
                 builder.setNegativeButton(R.string.dialog_cancel, dialogClickListener);
                 AlertDialog dialog = builder.create();
                 dialog.show();
@@ -220,6 +225,30 @@ public class MapsRentalActivity extends FragmentActivity implements OnMapReadyCa
         }
 
     }
+
+    public  void Call(String phone) {
+        // show() method display the toast with message
+        // "clicked"
+        Toast.makeText(this, "clicked", Toast.LENGTH_LONG)
+                .show();
+        // Use format with "tel:" and phoneNumber created is
+        // stored in u.
+        Uri u = Uri.parse("tel:" + phone);
+        // Create the intent and set the data for the
+        // intent as the phone number.
+        Intent i = new Intent(Intent.ACTION_DIAL, u);
+        try {
+            // Launch the Phone app's dialer with a phone
+            // number to dial a call.
+            startActivity(i);
+        }
+        catch (SecurityException s) {
+            // show() method display the toast with
+            // exception message.
+
+        }
+    }
+
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
